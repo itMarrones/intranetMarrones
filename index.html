@@ -2,298 +2,134 @@
 <html lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Menú Principal - Caja Lateral Corredera</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
-  <style>
-    /* Estilo general */
-    html,
-    body {
-      font-family: 'Montserrat', sans-serif;
-      margin: 0;
-      padding: 0;
-      height: 100%;
-      box-sizing: border-box;
-      overflow-x: hidden;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-      background: linear-gradient(135deg, #58a4a4, #2d5559);
-    }
-
-    /* Header */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background-color: #f4fbff;
-      padding: 15px 30px;
-      position: sticky;
-      top: 0;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      z-index: 10;
-    }
-
-    .logo img {
-      height: 60px;
-    }
-
-    .menu-header {
-      font-size: 30px;
-      font-weight: bold;
-      color: #2d5559;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-    }
-
-    /* Caja Lateral Corredera */
-    .sidebar {
-      margin-top: 10px;
-      position: fixed;
-      top: 90px;
-      left: -260px;
-      width: 250px;
-      height: calc(100vh - 90px);
-      background-color: #f4fbff;
-      border-radius: 15px;
-      box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
-      transition: left 0.5s ease;
-      padding: 20px;
-      z-index: 9;
-      overflow-y: auto;
-      scrollbar-width: none;
-      /* Firefox */
-      -ms-overflow-style: none;
-      /* IE y Edge */
-    }
-
-    .sidebar.active {
-      left: 0;
-    }
-
-    .sidebar.inactive {
-      left: -260px;
-    }
-
-    /* Botones del menú */
-    .menu-button {
-      display: flex;
-      align-items: center;
-      padding: 12px 15px;
-      background-color: #f4fbff;
-      color: #2d5559;
-      text-decoration: none;
-      font-weight: 500;
-      margin: 8px 0;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-    }
-
-    .menu-button:hover {
-      background-color: #2d5559;
-      color: #f4fbff;
-    }
-
-    .menu-button i {
-      margin-right: 12px;
-      font-size: 18px;
-    }
-
-    /* Botón de despliegue */
-    .toggle-btn {
-      position: fixed;
-      top: 50%;
-      left: calc(-2px + 0%);
-      /* Posición inicial fuera del menú */
-      transform: translateY(-50%);
-      background-color: #f4fbff;
-      color: #58a4a4;
-      border: 2px solid #f4fbff;
-      border-radius: 50%;
-      padding: 15px;
-      cursor: pointer;
-      font-size: 24px;
-      z-index: 10;
-      transition: background-color 0.3s ease, left 0.5s ease;
-    }
-
-    .toggle-btn.active {
-      left: 250px;
-      /* Posición cuando el menú está abierto */
-    }
-
-    .toggle-btn:hover {
-      background-color: #58a4a4;
-      color: #f4fbff;
-    }
-
-    .menu {
-      overflow: hidden;
-      /* Oculta cualquier contenido desbordado */
-    }
-
-    /* Ocultar barra de scroll en navegadores modernos */
-    .sidebar::-webkit-scrollbar {
-      display: none;
-      /* Chrome, Safari y Opera */
-    }
-
-
-
-
-    /* Contenedor principal */
-    main {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      flex-grow: 1;
-      min-height: calc(100vh - 100px);
-      width: 100%;
-      padding-top: 5px;
-      box-sizing: border-box;
-    }
-
-    .contenedor {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 20px;
-      background: #f4fbff;
-      max-width: 1200px;
-      width: 90%;
-      border-radius: 12px;
-      box-sizing: border-box;
-    }
-
-    /* Responsividad */
-    @media (max-width: 768px) {
-      .menu-button {
-        width: 100%;
-        height: 70px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Principal - Caja Lateral Corredera</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <!-- Header -->
-  <header>
-    <div class="logo">
-      <img src="https://www.marrones.com/wp-content/uploads/2024/11/1.LOGO-MARRONES@2x.png" alt="Logo Marrones">
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <img src="https://www.marrones.com/wp-content/uploads/2024/11/1.LOGO-MARRONES@2x.png" alt="Logo Marrones">
+        </div>
+        <div class="menu-header">Menú Principal</div>
+    </header>
+
+    <!-- Caja Lateral -->
+    <div id="sidebar" class="sidebar inactive">
+        <!-- Sección Accesos Rápidos -->
+        <div class="menu-section">
+            <div class="section-title">Accesos Rápidos</div>
+            <a href="https://marronesgdr.sharepoint.com/" class="menu-button"><i class="fas fa-share"></i>Acceso a
+                SharePoint</a>
+            <a href="https://go.microsoft.com/fwlink/p/?LinkID=2125442&amp;deeplink=owa%2F" class="menu-button"><i
+                    class="fas fa-envelope"></i>Acceso a Webmail</a>
+            <a href="https://onedrive.live.com/login" class="menu-button"><i class="fas fa-cloud"></i>Acceso a
+                OneDrive</a>
+            <a href="https://teams.microsoft.com/v2/?lm=deeplink&amp;lmsrc=homePageWeb&amp;cmpid=WebSignIn&amp;culture=en-us&amp;country=us"
+                class="menu-button"><i class="fas fa-users"></i>Acceso a Teams</a>
+        </div>
+        <div class="section-divider"></div>
+
+        <!-- Sección Parte Personal -->
+        <div class="menu-section">
+            <div class="section-title">Parte Personal</div>
+            <a href="#" class="menu-button"><i class="fas fa-user"></i>Consultar Datos Personales</a>
+            <a href="#" class="menu-button"><i class="fas fa-calendar-alt"></i>Solicitar Permisos</a>
+            <a href="#" class="menu-button"><i class="fas fa-certificate"></i>Solicitar Certificados</a>
+        </div>
+        <div class="section-divider"></div>
+
+        <!-- Sección Compras -->
+        <div class="menu-section">
+            <div class="section-title">Compras</div>
+            <a href="#" class="menu-button"><i class="fas fa-box"></i>Peticiones de Material</a>
+            <a href="#" class="menu-button"><i class="fas fa-truck"></i>Registro de Pedidos</a>
+            <a href="#" class="menu-button"><i class="fas fa-laptop"></i>Stock IT</a>
+            <a href="#" class="menu-button"><i class="fas fa-clipboard"></i>Stock Oficina</a>
+        </div>
+        <div class="section-divider"></div>
+
+        <!-- Sección Recursos Humanos -->
+        <div class="menu-section">
+            <div class="section-title">Recursos Humanos</div>
+            <a href="/Menú-Principal/Formulario-de-Altas" class="menu-button"><i class="fas fa-user-plus"></i>Formulario
+                de
+                Altas</a>
+            <a href="/Menú-Principal/Formulario-de-bajas" class="menu-button"><i
+                    class="fas fa-user-minus"></i>Formulario de
+                Bajas</a>
+            <a href="/Menú-Principal/" class="menu-button"><i class="fas fa-box"></i>Formulario entrega de material</a>
+            <a href="#" class="menu-button"><i class="fas fa-undo"></i>Formulario devolución de material</a>
+        </div>
+        <div class="section-divider"></div>
+
+        <!-- Sección IT -->
+        <div class="menu-section">
+            <div class="section-title" style="pointer-events: none;">IT</div>
+            <a href="/Menú-Principal/Ticketing-marrones" class="menu-button"><i class="fas fa-tools"></i>Herramienta
+                Tickets</a>
+            <a href="#" class="menu-button"><i class="fas fa-key"></i>Cambiar Contraseña</a>
+        </div>
+        <div class="section-divider"></div>
+
+        <!-- Sección Marketing -->
+        <div class="menu-section">
+            <div class="section-title" style="pointer-events: none;">Marketing</div>
+            <a href="#" class="menu-button"><i class="fas fa-bullhorn"></i>Registro de incidencias</a>
+            <a href="#" class="menu-button"><i class="fas fa-chart-line"></i>Plan de Marketing</a>
+            <a href="#" class="menu-button"><i class="fas fa-ad"></i>Solicitar Material Publicitario</a>
+        </div>
+        <div class="section-dividr"></div>
+
+        <!-- Sección ATC -->
+        <div class="menu-section">
+            <div class="section-title" style="pointer-events: none;">ATC</div>
+            <a href="http://app.ester.cat:9000/logon.aspx?ReturnUrl=%2fplanificador.aspx" class="menu-button"><i
+                    class="fas fa-calendar"></i>Planificador</a>
+            <a href="https://phone.norvoz.es/#/" class="menu-button"><i class="fas fa-phone"></i>Centralita Online</a>
+            <a href="/Menú-Principal/Formulario-industrial" class="menu-button"><i
+                    class="fas fa-industry"></i>Formulario
+                Industrial</a>
+        </div>
+        <div class="section-divider"></div>
+
+        <!-- Sección Directorio de Usuarios -->
+        <div class="menu-section">
+            <div class="section-title" style="pointer-events: none;">Directorio de Usuarios</div>
+            <a href="https://intranetmarrones.powerappsportals.com/Men%C3%BA-Principal/Directorio-de-empleados/"
+                class="menu-button"><i class="fas fa-users"></i>Directorio</a>
+        </div>
+        <div class="section-divider"></div>
     </div>
-    <div class="menu-header">Menú Principal</div>
-  </header>
-
-  <!-- Caja Lateral -->
-  <div id="sidebar" class="sidebar inactive">
-    <!-- Sección Accesos Rápidos -->
-    <div class="menu-section">
-      <div class="section-title">Accesos Rápidos</div>
-      <a href="https://marronesgdr.sharepoint.com/" class="menu-button"><i class="fas fa-share"></i>Acceso a
-        SharePoint</a>
-      <a href="https://go.microsoft.com/fwlink/p/?LinkID=2125442&amp;deeplink=owa%2F" class="menu-button"><i
-          class="fas fa-envelope"></i>Acceso a Webmail</a>
-      <a href="https://onedrive.live.com/login" class="menu-button"><i class="fas fa-cloud"></i>Acceso a OneDrive</a>
-      <a href="https://teams.microsoft.com/v2/?lm=deeplink&amp;lmsrc=homePageWeb&amp;cmpid=WebSignIn&amp;culture=en-us&amp;country=us"
-        class="menu-button"><i class="fas fa-users"></i>Acceso a Teams</a>
     </div>
-    <div class="section-divider"></div>
 
-    <!-- Sección Parte Personal -->
-    <div class="menu-section">
-      <div class="section-title">Parte Personal</div>
-      <a href="#" class="menu-button"><i class="fas fa-user"></i>Consultar Datos Personales</a>
-      <a href="#" class="menu-button"><i class="fas fa-calendar-alt"></i>Solicitar Permisos</a>
-      <a href="#" class="menu-button"><i class="fas fa-certificate"></i>Solicitar Certificados</a>
-    </div>
-    <div class="section-divider"></div>
+    <!-- Botón para expandir/contraer -->
+    <button id="toggle-btn" class="toggle-btn">&#8594;</button>
 
-    <!-- Sección Compras -->
-    <div class="menu-section">
-      <div class="section-title">Compras</div>
-      <a href="#" class="menu-button"><i class="fas fa-box"></i>Peticiones de Material</a>
-      <a href="#" class="menu-button"><i class="fas fa-truck"></i>Registro de Pedidos</a>
-      <a href="#" class="menu-button"><i class="fas fa-laptop"></i>Stock IT</a>
-      <a href="#" class="menu-button"><i class="fas fa-clipboard"></i>Stock Oficina</a>
-    </div>
-    <div class="section-divider"></div>
+    <!-- Contenido Principal -->
+    <main>
+        <div class="contenedor">
+            <p>Contenido principal</p>
+        </div>
+    </main>
 
-    <!-- Sección Recursos Humanos -->
-    <div class="menu-section">
-      <div class="section-title">Recursos Humanos</div>
-      <a href="/Menú-Principal/Formulario-de-Altas" class="menu-button"><i class="fas fa-user-plus"></i>Formulario de
-        Altas</a>
-      <a href="/Menú-Principal/Formulario-de-bajas" class="menu-button"><i class="fas fa-user-minus"></i>Formulario de
-        Bajas</a>
-      <a href="/Menú-Principal/" class="menu-button"><i class="fas fa-box"></i>Formulario entrega de material</a>
-      <a href="#" class="menu-button"><i class="fas fa-undo"></i>Formulario devolución de material</a>
-    </div>
-    <div class="section-divider"></div>
+    <script>
+        // Lógica para la interacción de la barra lateral y el botón
+        const sidebar = document.getElementById('sidebar');
+        const toggleBtn = document.getElementById('toggle-btn');
 
-    <!-- Sección IT -->
-    <div class="menu-section">
-      <div class="section-title" style="pointer-events: none;">IT</div>
-      <a href="/Menú-Principal/Ticketing-marrones" class="menu-button"><i class="fas fa-tools"></i>Herramienta
-        Tickets</a>
-      <a href="#" class="menu-button"><i class="fas fa-key"></i>Cambiar Contraseña</a>
-    </div>
-    <div class="section-divider"></div>
-
-    <!-- Sección Marketing -->
-    <div class="menu-section">
-      <div class="section-title" style="pointer-events: none;">Marketing</div>
-      <a href="#" class="menu-button"><i class="fas fa-bullhorn"></i>Registro de incidencias</a>
-      <a href="#" class="menu-button"><i class="fas fa-chart-line"></i>Plan de Marketing</a>
-      <a href="#" class="menu-button"><i class="fas fa-ad"></i>Solicitar Material Publicitario</a>
-    </div>
-    <div class="section-divider"></div>
-
-    <!-- Sección ATC -->
-    <div class="menu-section">
-      <div class="section-title" style="pointer-events: none;">ATC</div>
-      <a href="http://app.ester.cat:9000/logon.aspx?ReturnUrl=%2fplanificador.aspx" class="menu-button"><i
-          class="fas fa-calendar"></i>Planificador</a>
-      <a href="https://phone.norvoz.es/#/" class="menu-button"><i class="fas fa-phone"></i>Centralita Online</a>
-      <a href="/Menú-Principal/Formulario-industrial" class="menu-button"><i class="fas fa-industry"></i>Formulario
-        Industrial</a>
-    </div>
-    <div class="section-divider"></div>
-
-    <!-- Sección Directorio de Usuarios -->
-    <div class="menu-section">
-      <div class="section-title" style="pointer-events: none;">Directorio de Usuarios</div>
-      <a href="https://intranetmarrones.powerappsportals.com/Men%C3%BA-Principal/Directorio-de-empleados/"
-        class="menu-button"><i class="fas fa-users"></i>Directorio</a>
-    </div>
-    <div class="section-divider"></div>
-  </div>
-  </div>
-
-  <!-- Botón para expandir/contraer -->
-  <button id="toggle-btn" class="toggle-btn">&#8594;</button>
-
-  <!-- Contenido Principal -->
-  <main>
-    <div class="contenedor">
-      <p>Contenido principal</p>
-    </div>
-  </main>
-
-  <script>
-    // Lógica para la interacción de la barra lateral y el botón
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggle-btn');
-
-    toggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('active');
-      sidebar.classList.toggle('inactive');
-      toggleBtn.classList.toggle('active');
-      toggleBtn.innerHTML = sidebar.classList.contains('active') ? '&#8592;' : '&#8594;';
-    });
-  </script>
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            sidebar.classList.toggle('inactive');
+            toggleBtn.classList.toggle('active');
+            toggleBtn.innerHTML = sidebar.classList.contains('active') ? '&#8592;' : '&#8594;';
+        });
+    </script>
 </body>
 
 </html>
