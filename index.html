@@ -142,7 +142,7 @@
       toggleBtn.innerHTML = sidebar.classList.contains('active') ? '&#8592;' : '&#8594;';
     });
 
-<<<<<<< HEAD
+
     // Asignamos un listener para cargar el contenido de cada formulario
     document.getElementById('btnFormAltas').addEventListener('click', function (event) {
       event.preventDefault();  // Prevenir el comportamiento por defecto del enlace
@@ -160,7 +160,7 @@
     });
 
     // Función para cargar contenido
-=======
+
     // Lógica para cargar el contenido dinámico al hacer clic en los botones
     document.getElementById('btnSharePoint').addEventListener('click', function () {
       loadContent('sharepoint');
@@ -178,14 +178,12 @@
       loadContent('teams');
     });
 
->>>>>>> 5cef8df827b16fe1965503576e1b98acf88f47ce
     function loadContent(page) {
       const contentContainer = document.getElementById('contentContainer');
 
       // Limpiar contenido previo
       contentContainer.innerHTML = '';
 
-<<<<<<< HEAD
       // Según a página, cargar el contenido
       switch (page) {
         case 'formularioAltas':
@@ -229,22 +227,6 @@
           `;
           break;
 
-=======
-      // Según la página, cargar el contenido
-      switch (page) {
-        case 'sharepoint':
-          contentContainer.innerHTML = '<h1>Acceso a SharePoint</h1><p>Este es el enlace a SharePoint.</p>';
-          break;
-        case 'webmail':
-          contentContainer.innerHTML = '<h1>Acceso a Webmail</h1><p>Este es el enlace a Webmail.</p>';
-          break;
-        case 'onedrive':
-          contentContainer.innerHTML = '<h1>Acceso a OneDrive</h1><p>Este es el enlace a OneDrive.</p>';
-          break;
-        case 'teams':
-          contentContainer.innerHTML = '<h1>Acceso a Teams</h1><p>Este es el enlace a Teams.</p>';
-          break;
->>>>>>> 5cef8df827b16fe1965503576e1b98acf88f47ce
         default:
           contentContainer.innerHTML = '<h1>Contenido no encontrado</h1>';
       }
