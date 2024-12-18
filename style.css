@@ -130,31 +130,6 @@ main {
   width: 90%;
   border-radius: 12px;
 }
-/* Botón de despliegue */
-.toggle-btn {
-  position: fixed;
-  top: 50%;
-  left: -50px; /* Posición inicial fuera del menú */
-  transform: translateY(-50%);
-  background-color: #f4fbff;
-  color: #58a4a4;
-  border: 2px solid #f4fbff;
-  border-radius: 50%;
-  padding: 15px;
-  cursor: pointer;
-  font-size: 24px;
-  z-index: 10;
-  transition: background-color 0.3s ease, left 0.5s ease;
-}
-
-.toggle-btn.active {
-  left: 250px; /* Posición cuando el menú está abierto */
-}
-
-.toggle-btn:hover {
-  background-color: #58a4a4;
-  color: #f4fbff;
-}
 
 /* Responsividad */
 @media (max-width: 768px) {
