@@ -64,7 +64,6 @@
       toggleBtn.innerHTML = sidebar.classList.contains('active') ? '&#8592;' : '&#8594;';
     });
 
-
     // Asignamos un listener para cargar el contenido de cada formulario
     document.getElementById('btnFormAltas').addEventListener('click', function (event) {
       event.preventDefault();  // Prevenir el comportamiento por defecto del enlace
@@ -82,31 +81,13 @@
     });
 
     // Función para cargar contenido
-
-    // Lógica para cargar el contenido dinámico al hacer clic en los botones
-    document.getElementById('btnSharePoint').addEventListener('click', function () {
-      loadContent('sharepoint');
-    });
-
-    document.getElementById('btnWebmail').addEventListener('click', function () {
-      loadContent('webmail');
-    });
-
-    document.getElementById('btnOneDrive').addEventListener('click', function () {
-      loadContent('onedrive');
-    });
-
-    document.getElementById('btnTeams').addEventListener('click', function () {
-      loadContent('teams');
-    });
-
     function loadContent(page) {
       const contentContainer = document.getElementById('contentContainer');
 
       // Limpiar contenido previo
       contentContainer.innerHTML = '';
 
-      // Según a página, cargar el contenido
+      // Según a la página, cargar el contenido
       switch (page) {
         case 'formularioAltas':
           contentContainer.innerHTML = `
