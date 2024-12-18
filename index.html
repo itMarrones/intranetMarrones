@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menú Principal - Caja Lateral Corredera</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="logo">
+      <img src="https://www.marrones.com/wp-content/uploads/2024/11/1.LOGO-MARRONES@2x.png" alt="Logo Marrones">
+    </div>
+    <div class="menu-header">Menú Principal</div>
+  </header>
+
+  <!-- Caja Lateral -->
+  <div id="sidebar" class="sidebar inactive">
+    <!-- Sección Accesos Rápidos -->
+    <div class="menu-section">
+      <div class="section-title">Accesos Rápidos</div>
+      <a href="https://marronesgdr.sharepoint.com/" class="menu-button"><i class="fas fa-share"></i>Acceso a SharePoint</a>
+      <a href="https://go.microsoft.com/fwlink/p/?LinkID=2125442&amp;deeplink=owa%2F" class="menu-button"><i
+          class="fas fa-envelope"></i>Acceso a Webmail</a>
+      <a href="https://onedrive.live.com/login" class="menu-button"><i class="fas fa-cloud"></i>Acceso a OneDrive</a>
+      <a href="https://teams.microsoft.com/v2/?lm=deeplink&amp;lmsrc=homePageWeb&amp;cmpid=WebSignIn&amp;culture=en-us&amp;country=us"
+        class="menu-button"><i class="fas fa-users"></i>Acceso a Teams</a>
+    </div>
+    <div class="section-divider"></div>
+
+    <!-- Sección Parte Personal -->
+    <div class="menu-section">
+      <div class="section-title">Parte Personal</div>
+      <a href="#" id="btnFormAltas" class="menu-button"><i class="fas fa-user"></i>Formulario de Altas</a>
+      <a href="#" id="btnFormBajas" class="menu-button"><i class="fas fa-user-minus"></i>Formulario de Bajas</a>
+      <a href="#" id="btnFormEntrega" class="menu-button"><i class="fas fa-box"></i>Formulario Entrega de Material</a>
+    </div>
+  </div>
+
+  <!-- Botón para expandir/contraer -->
+  <button id="toggle-btn" class="toggle-btn">&#8594;</button>
+
+  <!-- Contenido Principal -->
+  <main>
+    <div class="contenedor" id="contentContainer">
+      <p>Contenido principal</p>
+    </div>
+  </main>
+
+  <script>
+    // Lógica para la interacción de la barra lateral y el botón
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-btn');
+
+    toggleBtn.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+      sidebar.classList.toggle('inactive');
+      toggleBtn.classList.toggle('active');
+      toggleBtn.innerHTML = sidebar.classList.contains('active') ? '&#8592;' : '&#8594;';
+    });
+
+
+    // Asignamos un listener para cargar el contenido de cada formulario
+    document.getElementById('btnFormAltas').addEventListener('click', function (event) {
+      event.preventDefault();  // Prevenir el comportamiento por defecto del enlace
+      loadContent('formularioAltas');
+    });
+
+    document.getElementById('btnFormBajas').addEventListener('click', function (event) {
+      event.preventDefault();
+      loadContent('formularioBajas');
+    });
+
+    document.getElementById('btnFormEntrega').addEventListener('click', function (event) {
+      event.preventDefault();
+      loadContent('formularioEntrega');
+    });
+
+    // Función para cargar contenido
+
+    // Lógica para cargar el contenido dinámico al hacer clic en los botones
+    document.getElementById('btnSharePoint').addEventListener('click', function () {
+      loadContent('sharepoint');
+    });
+
+    document.getElementById('btnWebmail').addEventListener('click', function () {
+      loadContent('webmail');
+    });
+
+    document.getElementById('btnOneDrive').addEventListener('click', function () {
+      loadContent('onedrive');
+    });
+
+    document.getElementById('btnTeams').addEventListener('click', function () {
+      loadContent('teams');
+    });
+
+    function loadContent(page) {
+      const contentContainer = document.getElementById('contentContainer');
+
+      // Limpiar contenido previo
+      contentContainer.innerHTML = '';
+
+      // Según a página, cargar el contenido
+      switch (page) {
+        case 'formularioAltas':
+          contentContainer.innerHTML = `
+            <h1>Formulario de Altas</h1>
+            <form id="registroForm">
+              <label for="fecha">Fecha *</label><input type="date" id="fecha" name="fecha" required />
+              <label for="tipoRegistro">Tipo de Registro *</label><select id="tipoRegistro" name="tipoRegistro" required>
+                <option value="" disabled selected>Selecciona una opción</option>
+                <option value="alta">Alta</option>
+                <option value="cambio">Cambio de puesto</option>
+                <option value="sustitucion">Sustitución</option>
+              </select>
+              <label for="dni">DNI *</label><input type="text" id="dni" name="dni" required />
+              <label for="nombre">Nombre y Apellidos *</label><input type="text" id="nombre" name="nombre" required />
+              <label for="fechaIncorporacion">Fecha de Incorporación *</label><input type="date" id="fechaIncorporacion" name="fechaIncorporacion" required />
+              <button type="submit">Enviar</button>
+            </form>
+          `;
+          break;
+
+        case 'formularioBajas':
+          contentContainer.innerHTML = `
+            <h1>Formulario de Bajas</h1>
+            <form id="formBajas">
+              <label for="nombre">Nombre *</label><input type="text" id="nombre" name="nombre" required />
+              <label for="motivo">Motivo de Baja *</label><textarea id="motivo" name="motivo" required></textarea>
+              <button type="submit">Enviar</button>
+            </form>
+          `;
+          break;
+
+        case 'formularioEntrega':
+          contentContainer.innerHTML = `
+            <h1>Formulario de Entrega de Material</h1>
+            <form id="formEntrega">
+              <label for="material">Material *</label><input type="text" id="material" name="material" required />
+              <label for="cantidad">Cantidad *</label><input type="number" id="cantidad" name="cantidad" required />
+              <button type="submit">Enviar</button>
+            </form>
+          `;
+          break;
+
+        default:
+          contentContainer.innerHTML = '<h1>Contenido no encontrado</h1>';
+      }
+    }
+  </script>
+</body>
+
+</html>
