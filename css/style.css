@@ -436,7 +436,7 @@ select {
   header {
     display: flex;
     justify-content: space-between;
-    /* Espacia los elementos a los extremos */
+    /* Los elementos estarán a los extremos */
     align-items: center;
     background-color: #f4fbff;
     padding: 0 20px;
@@ -453,7 +453,7 @@ select {
   /* Estilo del logo */
   .logo img {
     max-height: 50px;
-    /* Reducir el tamaño */
+    /* Ajustar el tamaño */
     width: auto;
   }
 
@@ -466,8 +466,8 @@ select {
     color: #2d5559;
     text-transform: uppercase;
     letter-spacing: 5px;
-    flex: 1;
-    /* Espacio flexible para el texto */
+    flex-grow: 1;
+    /* Esto hace que el texto ocupe el centro */
     text-align: center;
   }
 
@@ -476,7 +476,7 @@ select {
     width: 50px;
     height: 50px;
     font-size: 36px;
-    /* Reducir tamaño */
+    /* Ajustar el tamaño */
   }
 
 }
