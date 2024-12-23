@@ -509,3 +509,28 @@ document.addEventListener("DOMContentLoaded", function () {
     // Llamar a la función para configurar el formulario
     setupIndustrialForm();
 });
+
+// Función para gestionar el desplegable del perfil
+function setupProfileDropdown() {
+    const profileButton = document.getElementById('profileButton');
+    const profileDropdown = document.getElementById('dropdownMenu');
+
+    if (profileButton && profileDropdown) {
+        profileButton.addEventListener('click', function () {
+            // Toggle visibility del menú desplegable
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        // Cerrar el desplegable si se hace clic fuera del menú
+        window.addEventListener('click', function (event) {
+            if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+    }
+}
+
+// Llamada a la función cuando la página esté cargada
+window.onload = function () {
+    setupProfileDropdown();
+};
