@@ -216,149 +216,6 @@ const forms = {
     }
 }
 
-/// Funciones y lógica para la aplicación
-
-// Función para cargar contenido en el contenedor principal
-function loadContent(page) {
-    const contentContainer = document.getElementById('contentContainer');
-
-    // Limpiar contenido previo
-    if (contentContainer) {
-        contentContainer.innerHTML = ''; // Limpiar el contenedor
-
-        // Verifica que el formulario exista en el objeto `forms`
-        if (forms[page]) {
-            contentContainer.innerHTML = forms[page].html;
-        } else {
-            contentContainer.innerHTML = '<h1>Contenido no encontrado</h1>';
-        }
-    }
-}
-
-// Lógica para la interacción de la barra lateral y el botón de expansión
-function setupSidebarToggle() {
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggle-btn');
-
-    if (sidebar && toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            sidebar.classList.toggle('active');
-            sidebar.classList.toggle('inactive');
-            toggleBtn.classList.toggle('active');
-            toggleBtn.innerHTML = sidebar.classList.contains('active') ? '&#8592;' : '&#8594;';
-        });
-    }
-}
-
-// Asignar listeners para cargar contenido de los formularios
-function setupFormButtons() {
-    const btnFormAltas = document.getElementById('btnFormAltas');
-    const btnFormBajas = document.getElementById('btnFormBajas');
-    const btnFormIndustrial = document.getElementById('btnFormIndustrial'); // Botón Industrial
-
-    if (btnFormAltas) {
-        btnFormAltas.addEventListener('click', function (event) {
-            event.preventDefault(); // Prevenir el comportamiento por defecto del enlace
-            loadContent('formularioAltas');
-        });
-    }
-
-    if (btnFormBajas) {
-        btnFormBajas.addEventListener('click', function (event) {
-            event.preventDefault();
-            loadContent('formularioBajas');
-        });
-    }
-
-    if (btnFormIndustrial) {
-        btnFormIndustrial.addEventListener('click', function (event) {
-            event.preventDefault();
-            loadContent('formularioIndustrial'); // Cargar formulario Industrial
-        });
-    }
-}
-// Llamar a las funciones de configuración
-setupFormButtons();
-
-// Si seleccionan "No" para material, desmarcar todos los checkboxes
-function setupMaterialCheckboxes() {
-    const noMaterial = document.getElementById('noMaterial');
-    const materialCheckboxes = document.querySelectorAll('input[name="material"]');
-
-    if (noMaterial && materialCheckboxes) {
-        noMaterial.addEventListener('change', () => {
-            if (noMaterial.checked) {
-                materialCheckboxes.forEach(checkbox => {
-                    checkbox.checked = false; // Desmarcar todos los checkboxes
-                });
-                const otrosMaterialText = document.getElementById('otrosMaterialText');
-                if (otrosMaterialText) {
-                    otrosMaterialText.value = ''; // Limpiar el campo "Otros"
-                }
-            }
-        });
-    }
-}
-
-// Función para cargar empleados en la tabla
-function loadEmployees() {
-    const tbody = document.getElementById("employee-tbody");
-    if (!tbody) return; // Verificar si la tabla existe
-
-    tbody.innerHTML = ""; // Limpiar la tabla antes de cargar los datos
-
-    // Asegúrate de que `window.employees` esté disponible
-    const employees = window.employees || []; // Cambié a window.employees para evitar problemas con `this`
-
-    employees.forEach(employee => {
-        const row = document.createElement("tr");
-
-        Object.values(employee).forEach(value => {
-            const cell = document.createElement("td");
-            cell.textContent = value;
-            row.appendChild(cell);
-        });
-
-        tbody.appendChild(row);
-    });
-}
-
-// Función para filtrar la lista de empleados
-function filterEmployees(event) {
-    const searchTerm = event.target.value.toLowerCase();
-    const rows = document.querySelectorAll('#employee-tbody tr');
-
-    rows.forEach(row => {
-        const name = row.cells[0].textContent.toLowerCase();
-        const department = row.cells[1].textContent.toLowerCase();
-        const sede = row.cells[6].textContent.toLowerCase();
-
-        if (name.includes(searchTerm) || department.includes(searchTerm) || sede.includes(searchTerm)) {
-            row.style.display = '';  // Mostrar la fila
-        } else {
-            row.style.display = 'none';  // Ocultar la fila
-        }
-    });
-}
-
-// Asignar el listener de búsqueda
-function setupSearchListener() {
-    const searchInput = document.getElementById('search');
-    if (searchInput) {
-        searchInput.addEventListener('input', filterEmployees);
-    }
-}
-
-// Llamar a las funciones al cargar la página
-window.onload = function () {
-    setupSidebarToggle();
-    setupFormButtons();
-    setupMaterialCheckboxes();
-    setupSearchListener();
-    loadEmployees(); // Cargar empleados al cargar la página
-    setupIndustrialForm(); // Llamar a la configuración del formulario Industrial
-};
-
 const datos = [
     {
         "Municipio": "ABRERA",
@@ -380,26 +237,142 @@ const datos = [
     }
 ];
 
-// Función para llenar los municipios en el select
-function llenarMunicipios() {
-    var municipioSelect = document.getElementById('municipio');
-    if (municipioSelect) {
-        municipioSelect.innerHTML = 'Aquí pones el contenido o las opciones';
-    } else {
-        console.error("El elemento 'municipio' no se encuentra en el DOM");
+// Función para cargar contenido en el contenedor principal
+function loadContent(page) {
+    const contentContainer = document.getElementById('contentContainer');
+    if (contentContainer) {
+        contentContainer.innerHTML = forms[page] ? forms[page].html : '<h1>Contenido no encontrado</h1>';
     }
 }
 
+// Lógica para la interacción de la barra lateral y el botón de expansión
+function setupSidebarToggle() {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-btn');
+    if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            sidebar.classList.toggle('inactive');
+            toggleBtn.classList.toggle('active');
+            toggleBtn.innerHTML = sidebar.classList.contains('active') ? '&#8592;' : '&#8594;';
+        });
+    }
+}
 
+// Asignar listeners para cargar contenido de los formularios
+function setupFormButtons() {
+    const btnFormAltas = document.getElementById('btnFormAltas');
+    const btnFormBajas = document.getElementById('btnFormBajas');
+    const btnFormIndustrial = document.getElementById('btnFormIndustrial');
+
+    if (btnFormAltas) {
+        btnFormAltas.addEventListener('click', (event) => {
+            event.preventDefault();
+            loadContent('formularioAltas');
+        });
+    }
+
+    if (btnFormBajas) {
+        btnFormBajas.addEventListener('click', (event) => {
+            event.preventDefault();
+            loadContent('formularioBajas');
+        });
+    }
+
+    if (btnFormIndustrial) {
+        btnFormIndustrial.addEventListener('click', (event) => {
+            event.preventDefault();
+            loadContent('formularioIndustrial');
+        });
+    }
+}
+
+// Función para gestionar el desplegable del perfil
+function setupProfileDropdown() {
+    const profileButton = document.getElementById('profileButton');
+    const profileDropdown = document.getElementById('dropdownMenu');
+    if (profileButton && profileDropdown) {
+        profileButton.addEventListener('click', () => {
+            profileDropdown.classList.toggle('hidden');
+        });
+
+        window.addEventListener('click', (event) => {
+            if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+    }
+}
+
+// Función para cargar empleados en la tabla
+function loadEmployees() {
+    const tbody = document.getElementById("employee-tbody");
+    if (!tbody) return;
+
+    tbody.innerHTML = "";
+    (window.employees || []).forEach(employee => {
+        const row = document.createElement("tr");
+        Object.values(employee).forEach(value => {
+            const cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+        });
+        tbody.appendChild(row);
+    });
+}
+
+// Función para filtrar la lista de empleados
+function filterEmployees(event) {
+    const searchTerm = event.target.value.toLowerCase();
+    document.querySelectorAll('#employee-tbody tr').forEach(row => {
+        const name = row.cells[0].textContent.toLowerCase();
+        const department = row.cells[1].textContent.toLowerCase();
+        const sede = row.cells[6].textContent.toLowerCase();
+        row.style.display = (name.includes(searchTerm) || department.includes(searchTerm) || sede.includes(searchTerm)) ? '' : 'none';
+    });
+}
+
+// Función para gestionar el toggle del sidebar
+function setupSidebarToggle() {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-btn');
+    if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+            sidebar.classList.toggle('inactive');
+            toggleBtn.classList.toggle('active');
+            toggleBtn.innerHTML = sidebar.classList.contains('active') ? '&#8592;' : '&#8594;';
+        });
+    }
+}
+
+// Lógica para manejar el formulario Industrial
+function setupIndustrialForm() {
+    llenarMunicipios();
+    document.getElementById('municipio').addEventListener('change', function () {
+        llenarRazonSocial(this.value);
+    });
+    document.getElementById('razonSocial').addEventListener('change', function () {
+        llenarCodigoClienteYViaPublica(this.value);
+    });
+}
+
+// Función para llenar los municipios en el select
+function llenarMunicipios() {
+    const municipioSelect = document.getElementById('municipio');
+    if (municipioSelect) {
+        municipioSelect.innerHTML = 'Aquí pones el contenido o las opciones';
+    }
+}
+
+// Función para llenar Razón Social
 function llenarRazonSocial(municipioSeleccionado) {
     const razonSelect = document.getElementById('razonSocial');
     razonSelect.innerHTML = '<option value="">Selecciona una Razón Social</option>';
     razonSelect.disabled = !municipioSeleccionado;
 
-    console.log("Municipio seleccionado:", municipioSeleccionado); // Verificar el municipio seleccionado
     if (municipioSeleccionado) {
         const razones = [...new Set(datos.filter(item => item.Municipio === municipioSeleccionado).map(item => item.RazonSocial))];
-        console.log("Razones Sociales:", razones); // Verificar las razones sociales
         razones.forEach(razonSocial => {
             const option = document.createElement('option');
             option.value = razonSocial;
@@ -409,6 +382,7 @@ function llenarRazonSocial(municipioSeleccionado) {
     }
 }
 
+// Función para llenar Código Cliente y Vía Pública
 function llenarCodigoClienteYViaPublica(razonSeleccionada) {
     const codigoSelect = document.getElementById('codigoCliente');
     const viaPublicaSelect = document.getElementById('viaPublica');
@@ -417,10 +391,8 @@ function llenarCodigoClienteYViaPublica(razonSeleccionada) {
     codigoSelect.disabled = !razonSeleccionada;
     viaPublicaSelect.disabled = !razonSeleccionada;
 
-    console.log("Razón Social seleccionada:", razonSeleccionada); // Verificar la razón social seleccionada
     if (razonSeleccionada) {
         const items = datos.filter(item => item.RazonSocial === razonSeleccionada);
-        console.log("Datos filtrados:", items); // Verificar los datos filtrados
         items.forEach(item => {
             const optionCodigo = document.createElement('option');
             optionCodigo.value = item.CodigoCliente;
@@ -434,143 +406,14 @@ function llenarCodigoClienteYViaPublica(razonSeleccionada) {
         });
     }
 }
-function setupIndustrialForm() {
-    // Código para configurar el formulario, por ejemplo:
-    llenarMunicipios();
-    document.getElementById('municipio').addEventListener('change', function () {
-        llenarRazonSocial(this.value);
-    });
-    document.getElementById('razonSocial').addEventListener('change', function () {
-        llenarCodigoClienteYViaPublica(this.value);
-    });
-    // Aquí puedes agregar más configuraciones según lo necesites.
-}
 
-let boton = document.getElementById('miBoton');
-if (boton) {
-    boton.addEventListener('click', function () {
-        console.log("Botón presionado");
-    });
-} else {
-    console.error("El elemento 'miBoton' no se encuentra en el DOM");
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-    // Selecciona todos los enlaces (<a>)
-    const links = document.querySelectorAll("a");
-
-    links.forEach(link => {
-        // Comprueba si el enlace es externo
-        const isExternal = link.hostname && link.hostname !== window.location.hostname;
-
-        if (isExternal) {
-            link.setAttribute("target", "_blank");
-            link.setAttribute("rel", "noopener noreferrer"); // Seguridad adicional
-        }
-    });
-});
-document.addEventListener("DOMContentLoaded", function () {
-    // Espera a que el DOM esté completamente cargado
-
-    const miBoton = document.getElementById("miBoton");
-    const municipio = document.getElementById("municipio");
-
-    // Verifica si los elementos existen antes de añadir el evento
-    if (miBoton) {
-        miBoton.addEventListener("click", function () {
-            // Acción del botón
-            console.log("Botón clickeado");
-        });
-    } else {
-        console.error("El elemento 'miBoton' no se encuentra en el DOM");
-    }
-
-    if (municipio) {
-        // Lógica relacionada con el municipio
-        console.log("Elemento municipio encontrado");
-    } else {
-        console.error("El elemento 'municipio' no se encuentra en el DOM");
-    }
-
-    // Tu función setupIndustrialForm también se debe modificar para esperar al DOM
-    function setupIndustrialForm() {
-        const form = document.getElementById("industrialForm");
-        if (form) {
-            form.addEventListener("submit", function (event) {
-                event.preventDefault();
-                // Lógica del formulario
-                console.log("Formulario enviado");
-            });
-        } else {
-            console.error("El formulario 'industrialForm' no se encuentra en el DOM");
-        }
-    }
-
-    // Llamar a la función para configurar el formulario
-    setupIndustrialForm();
-});
-
-// Función para gestionar el desplegable del perfil
-function setupProfileDropdown() {
-    const profileButton = document.getElementById('profileButton');
-    const profileDropdown = document.getElementById('dropdownMenu');
-
-    if (profileButton && profileDropdown) {
-        // Toggle del desplegable del perfil
-        profileButton.addEventListener('click', function () {
-            profileDropdown.classList.toggle('hidden');  // Agregar o quitar la clase 'hidden'
-        });
-
-        // Cerrar el desplegable si se hace clic fuera de él
-        window.addEventListener('click', function (event) {
-            if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
-                profileDropdown.classList.add('hidden');
-            }
-        });
-    }
-}
-
-// Llamada a la función cuando la página esté cargada
-window.onload = function () {
-    setupProfileDropdown();
-};
-
-// Función para gestionar el toggle del botón de menú y el desplegable del perfil
-function setupProfileDropdown() {
-    const profileButton = document.getElementById('profileButton');
-    const profileDropdown = document.getElementById('dropdownMenu');
-
-    if (profileButton && profileDropdown) {
-        // Toggle del desplegable del perfil
-        profileButton.addEventListener('click', function () {
-            profileDropdown.classList.toggle('hidden');  // Agregar o quitar la clase 'hidden'
-        });
-
-        // Cerrar el desplegable si se hace clic fuera de él
-        window.addEventListener('click', function (event) {
-            if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
-                profileDropdown.classList.add('hidden');
-            }
-        });
-    }
-}
-
-// Llamada a la función cuando la página esté cargada
+// Inicialización de eventos al cargar la página
 document.addEventListener('DOMContentLoaded', function () {
-    setupProfileDropdown();  // Configura el desplegable de perfil al cargar
+    setupSidebarToggle();
+    setupFormButtons();
+    setupMaterialCheckboxes();
+    setupSearchListener();
+    setupIndustrialForm();
+    setupProfileDropdown();
+    loadEmployees();  // Cargar empleados al cargar la página
 });
-
-// Función para gestionar el toggle del sidebar
-function setupSidebarToggle() {
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggle-btn');
-
-    if (sidebar && toggleBtn) {
-        toggleBtn.addEventListener('click', function () {
-            sidebar.classList.toggle('active');
-            sidebar.classList.toggle('inactive');
-            toggleBtn.classList.toggle('active');
-            toggleBtn.innerHTML = sidebar.classList.contains('active') ? '&#8592;' : '&#8594;';
-        });
-    }
-}
