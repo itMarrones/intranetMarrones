@@ -295,45 +295,6 @@ main {
   margin-top: 100px;
 }
 
-/* Responsividad */
-@media (max-width: 768px) {
-  .menu-button {
-      width: 100%;
-      height: 70px;
-  }
-
-  h1 {
-      font-size: 2rem;
-      margin: 120px 0 30px;
-  }
-
-  .logo img {
-      height: 50px;
-  }
-
-  nav {
-      flex-direction: column;
-      align-items: center;
-  }
-
-  form {
-      width: 90%;
-  }
-
-  input[type="text"],
-  input[type="email"],
-  input[type="tel"],
-  input[type="date"],
-  textarea,
-  select {
-      padding: 10px;
-  }
-
-  .materialOption {
-      flex-basis: 45%;
-  }
-}
-
 /* Estilo del formulario */
 form {
   max-width: 800px;
@@ -462,4 +423,40 @@ select {
 }
 .hidden {
   display: none;
+}
+
+/* Ajustes para pantallas medianas */
+@media (max-width: 1024px) {
+  .container {
+    width: 95%;
+  }
+
+  .logo img {
+    height: 40px;
+  }
+  
+  .menu-header {
+    font-size: 30px;
+  }
+  
+  .menu-button {
+    width: 100%;
+    height: 60px;
+  }
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sidebar {
+    left: -100%;
+  }
+
+  .toggle-btn {
+    left: 0;
+  }
 }
