@@ -412,37 +412,73 @@ select:focus {
 }
 
 select {
-  appearance: none; /* Ocultar estilos predeterminados del navegador */
-  -webkit-appearance: none; /* Para navegadores basados en WebKit */
-  -moz-appearance: none; /* Para Firefox */
+  appearance: none;
+  /* Ocultar estilos predeterminados del navegador */
+  -webkit-appearance: none;
+  /* Para navegadores basados en WebKit */
+  -moz-appearance: none;
+  /* Para Firefox */
   background-color: white;
   border: 1px solid #ccc;
   padding: 8px;
   border-radius: 4px;
   cursor: pointer;
 }
+
 .hidden {
   display: none;
 }
 
 /* Ajustes para pantallas medianas */
 @media (max-width: 1024px) {
-  .container {
-    width: 95%;
+
+  /* Estilos generales del header */
+  header {
+    display: flex;
+    justify-content: space-between;
+    /* Espacia los elementos a los extremos */
+    align-items: center;
+    background-color: #f4fbff;
+    padding: 0 20px;
+    height: 100px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
   }
 
+  /* Estilo del logo */
   .logo img {
-    height: 40px;
+    max-height: 50px;
+    /* Reducir el tamaño */
+    width: auto;
   }
-  
+
+  /* Estilo del texto 'Menú Principal' */
   .menu-header {
-    font-size: 30px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+    /* Reducir tamaño */
+    font-weight: 700;
+    color: #2d5559;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    flex: 1;
+    /* Espacio flexible para el texto */
+    text-align: center;
   }
-  
-  .menu-button {
-    width: 100%;
-    height: 60px;
+
+  /* Estilo del botón de perfil */
+  .profile-button {
+    width: 50px;
+    height: 50px;
+    font-size: 36px;
+    /* Reducir tamaño */
   }
+
 }
 
 /* Ajustes para pantallas pequeñas */
@@ -451,7 +487,7 @@ select {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .sidebar {
     left: -100%;
   }
