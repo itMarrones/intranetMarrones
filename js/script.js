@@ -516,12 +516,12 @@ function setupProfileDropdown() {
     const profileDropdown = document.getElementById('dropdownMenu');
 
     if (profileButton && profileDropdown) {
+        // Toggle del desplegable del perfil
         profileButton.addEventListener('click', function () {
-            // Toggle visibility del menú desplegable
-            profileDropdown.classList.toggle('hidden');
+            profileDropdown.classList.toggle('hidden');  // Agregar o quitar la clase 'hidden'
         });
 
-        // Cerrar el desplegable si se hace clic fuera del menú
+        // Cerrar el desplegable si se hace clic fuera de él
         window.addEventListener('click', function (event) {
             if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
                 profileDropdown.classList.add('hidden');
@@ -534,3 +534,43 @@ function setupProfileDropdown() {
 window.onload = function () {
     setupProfileDropdown();
 };
+
+// Función para gestionar el toggle del botón de menú y el desplegable del perfil
+function setupProfileDropdown() {
+    const profileButton = document.getElementById('profileButton');
+    const profileDropdown = document.getElementById('dropdownMenu');
+
+    if (profileButton && profileDropdown) {
+        // Toggle del desplegable del perfil
+        profileButton.addEventListener('click', function () {
+            profileDropdown.classList.toggle('hidden');  // Agregar o quitar la clase 'hidden'
+        });
+
+        // Cerrar el desplegable si se hace clic fuera de él
+        window.addEventListener('click', function (event) {
+            if (!profileButton.contains(event.target) && !profileDropdown.contains(event.target)) {
+                profileDropdown.classList.add('hidden');
+            }
+        });
+    }
+}
+
+// Llamada a la función cuando la página esté cargada
+document.addEventListener('DOMContentLoaded', function () {
+    setupProfileDropdown();  // Configura el desplegable de perfil al cargar
+});
+
+// Función para gestionar el toggle del sidebar
+function setupSidebarToggle() {
+    const sidebar = document.getElementById('sidebar');
+    const toggleBtn = document.getElementById('toggle-btn');
+
+    if (sidebar && toggleBtn) {
+        toggleBtn.addEventListener('click', function () {
+            sidebar.classList.toggle('active');
+            sidebar.classList.toggle('inactive');
+            toggleBtn.classList.toggle('active');
+            toggleBtn.innerHTML = sidebar.classList.contains('active') ? '&#8592;' : '&#8594;';
+        });
+    }
+}
