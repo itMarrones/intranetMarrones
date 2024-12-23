@@ -394,7 +394,7 @@ function llenarMunicipios() {
 function llenarRazonSocial(municipioSeleccionado) {
     const razonSelect = document.getElementById('razonSocial');
     razonSelect.innerHTML = '<option value="">Selecciona una Razón Social</option>';
-    razonSelect.disabled = !municipioSeleccionado; 
+    razonSelect.disabled = !municipioSeleccionado;
 
     console.log("Municipio seleccionado:", municipioSeleccionado); // Verificar el municipio seleccionado
     if (municipioSeleccionado) {
@@ -414,8 +414,8 @@ function llenarCodigoClienteYViaPublica(razonSeleccionada) {
     const viaPublicaSelect = document.getElementById('viaPublica');
     codigoSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
     viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
-    codigoSelect.disabled = !razonSeleccionada; 
-    viaPublicaSelect.disabled = !razonSeleccionada; 
+    codigoSelect.disabled = !razonSeleccionada;
+    viaPublicaSelect.disabled = !razonSeleccionada;
 
     console.log("Razón Social seleccionada:", razonSeleccionada); // Verificar la razón social seleccionada
     if (razonSeleccionada) {
@@ -437,10 +437,10 @@ function llenarCodigoClienteYViaPublica(razonSeleccionada) {
 function setupIndustrialForm() {
     // Código para configurar el formulario, por ejemplo:
     llenarMunicipios();
-    document.getElementById('municipio').addEventListener('change', function() {
+    document.getElementById('municipio').addEventListener('change', function () {
         llenarRazonSocial(this.value);
     });
-    document.getElementById('razonSocial').addEventListener('change', function() {
+    document.getElementById('razonSocial').addEventListener('change', function () {
         llenarCodigoClienteYViaPublica(this.value);
     });
     // Aquí puedes agregar más configuraciones según lo necesites.
@@ -448,7 +448,7 @@ function setupIndustrialForm() {
 
 let boton = document.getElementById('miBoton');
 if (boton) {
-    boton.addEventListener('click', function() {
+    boton.addEventListener('click', function () {
         console.log("Botón presionado");
     });
 } else {
@@ -468,4 +468,44 @@ document.addEventListener("DOMContentLoaded", function () {
             link.setAttribute("rel", "noopener noreferrer"); // Seguridad adicional
         }
     });
+});
+document.addEventListener("DOMContentLoaded", function () {
+    // Espera a que el DOM esté completamente cargado
+
+    const miBoton = document.getElementById("miBoton");
+    const municipio = document.getElementById("municipio");
+
+    // Verifica si los elementos existen antes de añadir el evento
+    if (miBoton) {
+        miBoton.addEventListener("click", function () {
+            // Acción del botón
+            console.log("Botón clickeado");
+        });
+    } else {
+        console.error("El elemento 'miBoton' no se encuentra en el DOM");
+    }
+
+    if (municipio) {
+        // Lógica relacionada con el municipio
+        console.log("Elemento municipio encontrado");
+    } else {
+        console.error("El elemento 'municipio' no se encuentra en el DOM");
+    }
+
+    // Tu función setupIndustrialForm también se debe modificar para esperar al DOM
+    function setupIndustrialForm() {
+        const form = document.getElementById("industrialForm");
+        if (form) {
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();
+                // Lógica del formulario
+                console.log("Formulario enviado");
+            });
+        } else {
+            console.error("El formulario 'industrialForm' no se encuentra en el DOM");
+        }
+    }
+
+    // Llamar a la función para configurar el formulario
+    setupIndustrialForm();
 });
