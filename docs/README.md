@@ -10,6 +10,9 @@ El proyecto está organizado de la siguiente manera:
   - style.css        -> Estilos personalizados para la interfaz.
 /js
   - script.js        -> Funciones dinámicas y lógica de interacción.
+  - formularioAltas, formularioBajas, ... -> Funciones y implantaciones de codigo
+/docs
+  - README.md        -> Este documento.
 
 /index.html          -> Página principal de la intranet.
 
