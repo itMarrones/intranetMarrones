@@ -11,6 +11,7 @@ El proyecto está organizado de la siguiente manera:
 /js
   - script.js        -> Funciones dinámicas y lógica de interacción.
   - formularioAltas, formularioBajas, ... -> Funciones y implantaciones de codigo
+
 /docs
   - README.md        -> Este documento.
 
