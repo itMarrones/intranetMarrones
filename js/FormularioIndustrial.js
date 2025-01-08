@@ -10895,7 +10895,7 @@ function populateSelects() {
         municipioSelect.appendChild(municipioOption);
     });
  
-    // Rellenar los selects de Razón Social, Código Cliente y Vía Pública dependiendo del municipio seleccionado
+    // Rellenar los selects de Razón Social dependiendo del municipio seleccionado
     municipioSelect.addEventListener('change', (e) => {
         const selectedMunicipio = e.target.value;
         const filteredData = datos.filter(item => item.Municipio === selectedMunicipio);
@@ -10910,7 +10910,23 @@ function populateSelects() {
             razonSocialOption.value = item.RazonSocial;
             razonSocialOption.textContent = item.RazonSocial;
             razonSocialSelect.appendChild(razonSocialOption);
+        });
  
+        // Habilitar el select de Razón Social
+        razonSocialSelect.disabled = false;
+    });
+ 
+    // Rellenar los selects de Código Cliente y Vía Pública automáticamente dependiendo de la razón social seleccionada
+    razonSocialSelect.addEventListener('change', (e) => {
+        const selectedRazonSocial = e.target.value;
+        const filteredData = datos.filter(item => item.RazonSocial === selectedRazonSocial);
+ 
+        // Limpiar los selects de Código Cliente y Vía Pública
+        codigoClienteSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
+        viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
+ 
+        filteredData.forEach(item => {
+            // Establecer los valores en los selects de Código Cliente y Vía Pública
             const codigoClienteOption = document.createElement('option');
             codigoClienteOption.value = item.CodigoCliente;
             codigoClienteOption.textContent = item.CodigoCliente;
@@ -10922,8 +10938,7 @@ function populateSelects() {
             viaPublicaSelect.appendChild(viaPublicaOption);
         });
  
-        // Habilitar los selects de Razón Social, Código Cliente y Vía Pública
-        razonSocialSelect.disabled = false;
+        // Habilitar los selects de Código Cliente y Vía Pública
         codigoClienteSelect.disabled = false;
         viaPublicaSelect.disabled = false;
     });
