@@ -10855,38 +10855,38 @@ const datos = [
 // Función para inicializar el formulario Industrial
 function inicializarFormularioIndustrial() {
     const formElement = document.getElementById('filter-form');
-
+ 
     // Manejo del envío del formulario
     formElement.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(formElement);
         const formObject = Object.fromEntries(formData);
         console.log('Formulario Industrial enviado:', formObject);
-
+ 
         // Llamada a Power Automate para llenar el Excel
         await enviarDatosAExcel(formObject);
     });
-
+ 
     // Cargar los datos dinámicamente en los selects
     populateSelects();
 }
-
+ 
 // Función para cargar los datos dinámicamente en los selects
 function populateSelects() {
     const municipioSelect = document.getElementById('municipio');
     const razonSocialSelect = document.getElementById('razonSocial');
     const codigoClienteSelect = document.getElementById('codigoCliente');
     const viaPublicaSelect = document.getElementById('viaPublica');
-
+ 
     // Limpiar los selects antes de llenarlos
     municipioSelect.innerHTML = '<option value="">Selecciona un Municipio</option>';
     razonSocialSelect.innerHTML = '<option value="">Selecciona una Razón Social</option>';
     codigoClienteSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
     viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
-
+ 
     // Filtrar municipios para eliminar duplicados
     const municipiosUnicos = [...new Set(datos.map(item => item.Municipio))];
-
+ 
     // Rellenar el select de municipios con los valores únicos
     municipiosUnicos.forEach(municipio => {
         const municipioOption = document.createElement('option');
@@ -10894,46 +10894,46 @@ function populateSelects() {
         municipioOption.textContent = municipio;
         municipioSelect.appendChild(municipioOption);
     });
-
+ 
     // Rellenar los selects de Razón Social, Código Cliente y Vía Pública dependiendo del municipio seleccionado
     municipioSelect.addEventListener('change', (e) => {
         const selectedMunicipio = e.target.value;
         const filteredData = datos.filter(item => item.Municipio === selectedMunicipio);
-
+ 
         // Limpiar los selects
         razonSocialSelect.innerHTML = '<option value="">Selecciona una Razón Social</option>';
         codigoClienteSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
         viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
-
+ 
         filteredData.forEach(item => {
             const razonSocialOption = document.createElement('option');
             razonSocialOption.value = item.RazonSocial;
             razonSocialOption.textContent = item.RazonSocial;
             razonSocialSelect.appendChild(razonSocialOption);
-
+ 
             const codigoClienteOption = document.createElement('option');
             codigoClienteOption.value = item.CodigoCliente;
             codigoClienteOption.textContent = item.CodigoCliente;
             codigoClienteSelect.appendChild(codigoClienteOption);
-
+ 
             const viaPublicaOption = document.createElement('option');
             viaPublicaOption.value = item.ViaPublica;
             viaPublicaOption.textContent = item.ViaPublica;
             viaPublicaSelect.appendChild(viaPublicaOption);
         });
-
+ 
         // Habilitar los selects de Razón Social, Código Cliente y Vía Pública
         razonSocialSelect.disabled = false;
         codigoClienteSelect.disabled = false;
         viaPublicaSelect.disabled = false;
     });
 }
-
+ 
 // Función para enviar los datos a Power Automate (PHP)
 async function enviarDatosAExcel(formData) {
     // URL de tu endpoint de Power Automate (asegúrate de reemplazarla con tu propia URL)
     const powerAutomateUrl = "https://prod-22.westeurope.logic.azure.com:443/workflows/f48904dca69449f4a895664e68348f11/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jGHzqXlfT3v4T8Bb9CjhNkH7QBtDIxz0DRIfFNUhXCY";
-
+ 
     // Preparar los datos para enviar en formato JSON (de acuerdo con el esquema que has proporcionado)
     const payload = {
         "Municipio": formData.municipio,
@@ -10942,7 +10942,7 @@ async function enviarDatosAExcel(formData) {
         "ViaPublica": formData.viaPublica,
         "ExteriorAccessible": formData.exteriorAccessible
     };
-
+ 
     try {
         // Enviar los datos a Power Automate a través de un POST
         const response = await fetch(powerAutomateUrl, {
@@ -10952,7 +10952,7 @@ async function enviarDatosAExcel(formData) {
             },
             body: JSON.stringify(payload) // Convierte los datos a JSON
         });
-
+ 
         if (response.ok) {
             const responseData = await response.json();
             console.log('Datos enviados correctamente a Power Automate:', responseData);
@@ -10976,7 +10976,7 @@ document.getElementById('btnFormIndustrial').addEventListener('click', function 
 // Asegúrate de que `window.forms` esté definido
 window.forms = window.forms || {};
 
-// Registro del formulario de Altas
+// Registro del formulario industrial
 window.forms['formularioIndustrial'] = {
     html: formularioIndustrialHTML, // La constante con el HTML del formulario
     init: inicializarFormularioIndustrial // La función de inicialización, si es necesaria
