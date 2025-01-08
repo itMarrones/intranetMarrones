@@ -42,6 +42,7 @@ const formularioIndustrialHTML = `
         <button type="submit" class="submit-btn">Enviar</button>
     </form>`;
 
+
 // Arreglo para almacenar las razones sociales seleccionadas
 let razonesSocialesSeleccionadas = [];
 
