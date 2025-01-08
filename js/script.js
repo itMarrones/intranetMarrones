@@ -14,30 +14,12 @@ function loadForm(formName) {
         if (formHTML.init) {
             formHTML.init(); // Inicializar el formulario si tiene lógica específica
         }
-
-        // Ocultar la barra lateral después de cargar el formulario
-        hideSidebar();
     } else {
         formContainer.innerHTML = '<h1>Formulario no encontrado</h1>';
         console.error(`Formulario '${formName}' no encontrado en la configuración.`);
     }
 }
 
-// Ocultar la barra lateral
-function hideSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const toggleBtn = document.getElementById('toggle-btn');
-
-    if (sidebar) {
-        sidebar.classList.remove('active'); // Remover la clase 'active' que hace visible la barra lateral
-        sidebar.classList.add('inactive'); // Añadir la clase 'inactive' para ocultarla
-    }
-
-    if (toggleBtn) {
-        toggleBtn.classList.remove('active'); // Cambiar el estado del botón de toggle
-        toggleBtn.innerHTML = '&#8594;'; // Cambiar el ícono del botón
-    }
-}
 
 // Re-inicializamos todos los eventos relacionados con la barra lateral, el toggle y otros
 function initializeSidebar() {
