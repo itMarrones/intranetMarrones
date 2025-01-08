@@ -1,46 +1,47 @@
-// Definir el formulario de Industrial
-const forms = {
-    "formularioIndustrial": {
-        "html": `
-            <h1>Formulario Industrial</h1>
-            <form id="filter-form">
-                <label for="municipio">Municipio:</label>
-                <select id="municipio" name="municipio">
-                    <option value="">Selecciona un Municipio</option>
-                </select>
-                <br>
+// Formularios HTML
+const formularioIndustrialHTML = `
+    <h1>Formulario Industrial</h1>
+    <form id="filter-form">
+        <!-- Municipio -->
+        <label for="municipio">Municipio:</label>
+        <select id="municipio" name="municipio">
+            <option value="">Selecciona un Municipio</option>
+        </select>
+        <br>
 
-                <label for="razonSocial">Razón Social:</label>
-                <select id="razonSocial" name="razonSocial" disabled>
-                    <option value="">Selecciona una Razón Social</option>
-                </select>
-                <br>
+        <!-- Razón Social -->
+        <label for="razonSocial">Razón Social:</label>
+        <select id="razonSocial" name="razonSocial" disabled>
+            <option value="">Selecciona una Razón Social</option>
+        </select>
+        <br>
 
-                <label for="codigoCliente">Código Cliente:</label>
-                <select id="codigoCliente" name="codigoCliente" disabled>
-                    <option value="">Selecciona un Código Cliente</option>
-                </select>
-                <br>
+        <!-- Código Cliente -->
+        <label for="codigoCliente">Código Cliente:</label>
+        <select id="codigoCliente" name="codigoCliente" disabled>
+            <option value="">Selecciona un Código Cliente</option>
+        </select>
+        <br>
 
-                <label for="viaPublica">Vía Pública:</label>
-                <select id="viaPublica" name="viaPublica" disabled>
-                    <option value="">Selecciona una Vía Pública</option>
-                </select>
-                <br>
+        <!-- Vía Pública -->
+        <label for="viaPublica">Vía Pública:</label>
+        <select id="viaPublica" name="viaPublica" disabled>
+            <option value="">Selecciona una Vía Pública</option>
+        </select>
+        <br>
 
-                <label for="exteriorAccessible">Exterior Accesible:</label>
-                <select id="exteriorAccessible" name="exteriorAccessible">
-                    <option value="">Selecciona una opción</option>
-                    <option value="Si">Sí</option>
-                    <option value="No">No</option>
-                </select>
-                <br>
+        <!-- Exterior Accesible -->
+        <label for="exteriorAccessible">Exterior Accesible:</label>
+        <select id="exteriorAccessible" name="exteriorAccessible">
+            <option value="">Selecciona una opción</option>
+            <option value="Si">Sí</option>
+            <option value="No">No</option>
+        </select>
+        <br>
 
-                <button type="submit">Enviar</button>
-            </form>
-        `
-    }
-};
+        <button type="submit" class="submit-btn">Enviar</button>
+    </form>`;
+
 // Datos para autocompletar
 const datos = [
     {
@@ -10851,105 +10852,132 @@ const datos = [
     }
 ];
 
-// Función para cargar contenido en el contenedor principal
-function loadContent(page) {
-    const contentContainer = document.getElementById('contentContainer');
-    if (contentContainer) {
-        contentContainer.innerHTML = forms[page] ? forms[page].html : '<h1>Contenido no encontrado</h1>';
-        if (page === 'formularioIndustrial') {
-            setupIndustrialForm(); // Inicializa los selectores del formulario Industrial
-        }
-    }
-}
+// Función para inicializar el formulario Industrial
+function inicializarFormularioIndustrial() {
+    const formElement = document.getElementById('filter-form');
 
-// Función para poblar los selectores
-function populateSelect(selectId, options) {
-    const select = document.getElementById(selectId);
-    if (select) {
-        select.innerHTML = '<option value="">Selecciona una opción</option>'; // Clear previous options
-        options.forEach(option => {
-            const opt = document.createElement('option');
-            opt.value = option;
-            opt.textContent = option;
-            select.appendChild(opt);
-        });
-    }
-}
+    // Manejo del envío del formulario
+    formElement.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(formElement);
+        const formObject = Object.fromEntries(formData);
+        console.log('Formulario Industrial enviado:', formObject);
 
-// Función para poblar el formulario industrial
-function setupIndustrialForm() {
-    llenarMunicipios(); // Llenar los municipios en el select
-    document.getElementById('municipio').addEventListener('change', function () {
-        llenarRazonSocial(this.value); // Llenar la razón social según el municipio seleccionado
+        // Llamada a Power Automate para llenar el Excel
+        await enviarDatosAExcel(formObject);
     });
-    document.getElementById('razonSocial').addEventListener('change', function () {
-        llenarCodigoClienteYViaPublica(this.value); // Llenar código cliente y vía pública según la razón social
-    });
+
+    // Cargar los datos dinámicamente en los selects
+    populateSelects();
 }
 
-// Función para llenar los municipios en el select
-function llenarMunicipios() {
+// Función para cargar los datos dinámicamente en los selects
+function populateSelects() {
     const municipioSelect = document.getElementById('municipio');
-    if (municipioSelect) {
-        const municipios = [...new Set(datos.map(item => item.Municipio))]; // Obtener municipios únicos
-        populateSelect('municipio', municipios); // Llenar el selector de municipios
-    }
-}
-
-// Función para llenar Razón Social
-function llenarRazonSocial(municipioSeleccionado) {
-    const razonSelect = document.getElementById('razonSocial');
-    razonSelect.innerHTML = '<option value="">Selecciona una Razón Social</option>';
-    razonSelect.disabled = !municipioSeleccionado;
-
-    if (municipioSeleccionado) {
-        const razones = [...new Set(datos.filter(item => item.Municipio === municipioSeleccionado).map(item => item.RazonSocial))];
-        razones.forEach(razonSocial => {
-            const option = document.createElement('option');
-            option.value = razonSocial;
-            option.textContent = razonSocial;
-            razonSelect.appendChild(option);
-        });
-        razonSelect.disabled = false;
-    }
-}
-
-// Función para llenar Código Cliente y Vía Pública
-function llenarCodigoClienteYViaPublica(razonSeleccionada) {
-    const codigoSelect = document.getElementById('codigoCliente');
+    const razonSocialSelect = document.getElementById('razonSocial');
+    const codigoClienteSelect = document.getElementById('codigoCliente');
     const viaPublicaSelect = document.getElementById('viaPublica');
-    codigoSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
+
+    // Limpiar los selects antes de llenarlos
+    municipioSelect.innerHTML = '<option value="">Selecciona un Municipio</option>';
+    razonSocialSelect.innerHTML = '<option value="">Selecciona una Razón Social</option>';
+    codigoClienteSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
     viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
-    codigoSelect.disabled = !razonSeleccionada;
-    viaPublicaSelect.disabled = !razonSeleccionada;
 
-    if (razonSeleccionada) {
-        const items = datos.filter(item => item.RazonSocial === razonSeleccionada);
-        items.forEach(item => {
-            const optionCodigo = document.createElement('option');
-            optionCodigo.value = item.CodigoCliente;
-            optionCodigo.textContent = item.CodigoCliente;
-            codigoSelect.appendChild(optionCodigo);
+    // Filtrar municipios para eliminar duplicados
+    const municipiosUnicos = [...new Set(datos.map(item => item.Municipio))];
 
-            const optionVia = document.createElement('option');
-            optionVia.value = item.ViaPublica;
-            optionVia.textContent = item.ViaPublica;
-            viaPublicaSelect.appendChild(optionVia);
+    // Rellenar el select de municipios con los valores únicos
+    municipiosUnicos.forEach(municipio => {
+        const municipioOption = document.createElement('option');
+        municipioOption.value = municipio;
+        municipioOption.textContent = municipio;
+        municipioSelect.appendChild(municipioOption);
+    });
+
+    // Rellenar los selects de Razón Social, Código Cliente y Vía Pública dependiendo del municipio seleccionado
+    municipioSelect.addEventListener('change', (e) => {
+        const selectedMunicipio = e.target.value;
+        const filteredData = datos.filter(item => item.Municipio === selectedMunicipio);
+
+        // Limpiar los selects
+        razonSocialSelect.innerHTML = '<option value="">Selecciona una Razón Social</option>';
+        codigoClienteSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
+        viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
+
+        filteredData.forEach(item => {
+            const razonSocialOption = document.createElement('option');
+            razonSocialOption.value = item.RazonSocial;
+            razonSocialOption.textContent = item.RazonSocial;
+            razonSocialSelect.appendChild(razonSocialOption);
+
+            const codigoClienteOption = document.createElement('option');
+            codigoClienteOption.value = item.CodigoCliente;
+            codigoClienteOption.textContent = item.CodigoCliente;
+            codigoClienteSelect.appendChild(codigoClienteOption);
+
+            const viaPublicaOption = document.createElement('option');
+            viaPublicaOption.value = item.ViaPublica;
+            viaPublicaOption.textContent = item.ViaPublica;
+            viaPublicaSelect.appendChild(viaPublicaOption);
         });
-        codigoSelect.disabled = false;
+
+        // Habilitar los selects de Razón Social, Código Cliente y Vía Pública
+        razonSocialSelect.disabled = false;
+        codigoClienteSelect.disabled = false;
         viaPublicaSelect.disabled = false;
+    });
+}
+
+// Función para enviar los datos a Power Automate (PHP)
+async function enviarDatosAExcel(formData) {
+    // URL de tu endpoint de Power Automate (asegúrate de reemplazarla con tu propia URL)
+    const powerAutomateUrl = "https://prod-22.westeurope.logic.azure.com:443/workflows/f48904dca69449f4a895664e68348f11/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jGHzqXlfT3v4T8Bb9CjhNkH7QBtDIxz0DRIfFNUhXCY";
+
+    // Preparar los datos para enviar en formato JSON (de acuerdo con el esquema que has proporcionado)
+    const payload = {
+        "Municipio": formData.municipio,
+        "RazonSocial": formData.razonSocial,
+        "CodigoCliente": parseInt(formData.codigoCliente), // Asegúrate de que sea un número
+        "ViaPublica": formData.viaPublica,
+        "ExteriorAccessible": formData.exteriorAccessible
+    };
+
+    try {
+        // Enviar los datos a Power Automate a través de un POST
+        const response = await fetch(powerAutomateUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Asegúrate de enviar los datos como JSON
+            },
+            body: JSON.stringify(payload) // Convierte los datos a JSON
+        });
+
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log('Datos enviados correctamente a Power Automate:', responseData);
+            // Aquí podrías mostrar un mensaje al usuario indicando que el Excel fue generado con éxito
+            alert("Los datos se enviaron correctamente y el Excel ha sido generado.");
+        } else {
+            console.error('Error al enviar datos a Power Automate:', response.statusText);
+            alert("Hubo un error al enviar los datos. Intenta nuevamente.");
+        }
+    } catch (error) {
+        console.error('Error de conexión con Power Automate:', error);
+        alert("Hubo un problema al conectarse con Power Automate.");
     }
 }
 
-// Inicializar el formulario de Industrial cuando el botón sea presionado
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('btnFormIndustrial').addEventListener('click', (event) => {
-        event.preventDefault();
-        loadContent('formularioIndustrial'); // Cargar el formulario Industrial
-    });
+// Botón para cargar el formulario Industrial
+document.getElementById('btnFormIndustrial').addEventListener('click', function () {
+    loadForm('formularioIndustrial');
 });
 
+// Asegúrate de que `window.forms` esté definido
 window.forms = window.forms || {};
-window.forms.formularioIndustrial = forms.formularioIndustrial;
 
-window.inicializarFormularioIndustrial = inicializarFormularioIndustrial;
+// Registro del formulario de Altas
+window.forms['formularioIndustrial'] = {
+    html: formularioIndustrialHTML, // La constante con el HTML del formulario
+    init: inicializarFormularioIndustrial // La función de inicialización, si es necesaria
+};

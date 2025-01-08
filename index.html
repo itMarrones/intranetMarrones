@@ -1,138 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Intranet</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
-        rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/login.css">
+    <script src="js/login.js"></script>
+    <title>Login Intranet Marrones</title>
 </head>
-
 <body>
-    <header>
-        <div class="logo">
-            <a href="/Menú-Principal"><img
-                    src="https://www.marrones.com/wp-content/uploads/2024/11/1.LOGO-MARRONES@2x.png" alt="Logo Marrones"
-                    loading="lazy" /></a>
+    <div class="contenedor">
+        <div class="contenedor-bienvenida">
+            <img src="https://www.marrones.com/wp-content/uploads/2024/11/1.LOGO-MARRONES@2x.png" alt="Logo Marrones" />
+            <h2>Bienvenido a la Intranet de Grupo Marrones</h2>
+            <p>Accede a tu cuenta para encontrar las herramientas que necesitas y gestionar tu información personal de
+                manera
+                fácil y rápida.</p>
         </div>
-        <div class="menu-header">Menú Principal</div>
-        <div id="profileButton" class="profile-button">
-            <span class="material-icons">account_circle</span>
+        <div class="contenedor-login">
+            <h1>Iniciar sesión</h1>
+            <div class="campo"><i class="fas fa-user"></i><input type="text" id="usuario" placeholder="Usuario"
+                    required="" />
+            </div>
+            <div class="campo"><i class="fas fa-lock"></i><input type="password" id="contrasena" placeholder="Contraseña"
+                    required="" /></div>
+            <div class="opciones">
+                <label><input type="checkbox" id="recordarme" /> Recuérdame </label><a href="#">¿Olvidaste tu
+                    contraseña?</a>
+            </div>
+            <button id="botonLogin">Acceder</button>
         </div>
-        <!-- Dropdown de perfil -->
-        <div id="dropdownMenu" class="dropdown">
-            <a href="#mi-perfil">Mi perfil</a>
-            <a href="#configuracion">Configuración</a>
-            <a href="#cerrar-sesion">Cerrar sesión</a>
-        </div>
-    </header>
-
-    <!-- Sidebar -->
-    <div id="sidebar" class="sidebar inactive">
-        <!-- Sección Accesos Rápidos -->
-        <div class="menu-section">
-            <div class="section-title" style="pointer-events: none;">Accesos Rápidos</div>
-            <a href="https://marronesgdr.sharepoint.com/" class="menu-button"><i class="fas fa-share"></i>Acceso a
-                SharePoint</a>
-            <a href="https://go.microsoft.com/fwlink/p/?LinkID=2125442&amp;deeplink=owa%2F" class="menu-button"><i
-                    class="fas fa-envelope"></i>Acceso a Webmail</a>
-            <a href="https://onedrive.live.com/login" class="menu-button"><i class="fas fa-cloud"></i>Acceso a
-                OneDrive</a>
-            <a href="https://teams.microsoft.com/v2/?lm=deeplink&amp;lmsrc=homePageWeb&amp;cmpid=WebSignIn&amp;culture=en-us&amp;country=us"
-                class="menu-button"><i class="fas fa-users"></i>Acceso a Teams</a>
-        </div>
-        <div class="section-divider"></div>
-
-        <!-- Sección Parte Personal -->
-        <div class="menu-section">
-            <div class="section-title" style="pointer-events: none;">Parte Personal</div>
-            <a href="#" class="menu-button"><i class="fas fa-user"></i>Consultar Datos Personales</a>
-            <a href="#" class="menu-button"><i class="fas fa-calendar-alt"></i>Solicitar Permisos</a>
-            <a href="#" class="menu-button"><i class="fas fa-certificate"></i>Solicitar Certificados</a>
-        </div>
-        <div class="section-divider"></div>
-
-        <!-- Sección Compras -->
-        <div class="menu-section">
-            <div class="section-title" style="pointer-events: none;">Compras</div>
-            <a href="#" class="menu-button"><i class="fas fa-box"></i>Peticiones de Material</a>
-            <a href="#" class="menu-button"><i class="fas fa-truck"></i>Registro de Pedidos</a>
-            <a href="#" class="menu-button"><i class="fas fa-laptop"></i>Stock IT</a>
-            <a href="#" class="menu-button"><i class="fas fa-clipboard"></i>Stock Oficina</a>
-        </div>
-        <div class="section-divider"></div>
-
-        <!-- Sección Recursos Humanos -->
-        <div class="menu-section">
-            <div class="section-title" style="pointer-events: none;">Recursos Humanos</div>
-            <a href="" id="btnFormAltas" class="menu-button"><i class="fas fa-user-plus"></i>Formulario de Altas</a>
-            <a href="" id="btnFormBajas" class="menu-button"><i class="fas fa-user-minus"></i>Formulario de Bajas</a>
-            <a href="" class="menu-button"><i class="fas fa-box"></i>Formulario entrega de material</a>
-            <a href="" class="menu-button"><i class="fas fa-undo"></i>Formulario devolución de material</a>
-        </div>
-        <div class="section-divider"></div>
-
-        <!-- Sección IT -->
-        <div class="menu-section">
-            <div class="section-title" style="pointer-events: none;">IT</div>
-            <a href="" class="menu-button"><i class="fas fa-tools"></i>Herramienta
-                Tickets</a>
-            <a href="#" class="menu-button"><i class="fas fa-key"></i>Cambiar Contraseña</a>
-        </div>
-        <div class="section-divider"></div>
-
-        <!-- Sección Marketing -->
-        <div class="menu-section">
-            <div class="section-title" style="pointer-events: none;">Marketing</div>
-            <a href="#" class="menu-button"><i class="fas fa-bullhorn"></i>Registro de incidencias</a>
-            <a href="#" class="menu-button"><i class="fas fa-chart-line"></i>Plan de Marketing</a>
-            <a href="#" class="menu-button"><i class="fas fa-ad"></i>Solicitar Material Publicitario</a>
-        </div>
-        <div class="section-divider"></div>
-
-        <!-- Sección ATC -->
-        <div class="menu-section">
-            <div class="section-title" style="pointer-events: none;">ATC</div>
-            <a href="http://app.ester.cat:9000/logon.aspx?ReturnUrl=%2fplanificador.aspx" class="menu-button"><i
-                    class="fas fa-calendar"></i>Planificador</a>
-            <a href="https://phone.norvoz.es/#/" class="menu-button"><i class="fas fa-phone"></i>Centralita Online</a>
-            <a href="" id="btnFormIndustrial" class="menu-button"><i class="fas fa-industry"></i>Formulario
-                Industrial</a>
-        </div>
-        <div class="section-divider"></div>
-
-        <!-- Sección Directorio de Usuarios -->
-        <div class="menu-section">
-            <div class="section-title" style="pointer-events: none;">Directorio de Usuarios</div>
-            <a href="https://intranetmarrones.powerappsportals.com/Men%C3%BA-Principal/Directorio-de-empleados/"
-                class="menu-button"><i class="fas fa-users"></i>Directorio</a>
-        </div>
-        <div class="section-divider"></div>
     </div>
-
-    <!-- Botón para expandir/contraer -->
-    <button id="toggle-btn" class="toggle-btn">→</button>
-
-    <!-- Contenido Principal -->
-    <main>
-        <div id="contentContainer" class="contenedor">
-            <p>Contenido principal</p>
-            <!-- Contenedor donde se cargará el formulario -->
-            <div id="form-container"></div>
+    
+    <!-- Importación de Font Awesome para íconos -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+    <div class="row sectionBlockLayout text-start"
+        style="display: flex; flex-wrap: wrap; margin: 0px; min-height: auto; padding: 8px;">
+        <div class="container" style="padding: 0px; display: flex; flex-wrap: wrap;">
+            <div class="col-lg-12 columnBlockLayout"
+                style="flex-grow: 1; display: flex; flex-direction: column; min-width: 250px;"></div>
         </div>
-    </main>
-
-    <script src="js/FormularioAltas.js"></script>
-    <script src="js/FormularioBajas.js"></script>
-    <script src="js/FormularioIndustrial.js"></script>
-    <script src="js/script.js"></script>
+    </div>
 </body>
-
 </html>

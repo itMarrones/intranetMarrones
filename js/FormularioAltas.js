@@ -1,7 +1,5 @@
 // Definir los formularios disponibles en un objeto 
-const forms = {
-    "formularioAltas": {
-        "html": `
+const formularioAltasHTML = `
             <h1>Formulario de Altas</h1>
             <form id="formularioAltas" class="form-container">
                 <label for="fecha">Fecha *</label>
@@ -85,9 +83,7 @@ const forms = {
                 </div>
                 <button type="submit" class="submit-btn">Enviar</button>
             </form>
-        `
-    }
-};
+        `;
 
 // Inicializar el formulario de Altas (validaciones, eventos, etc.)
 function inicializarFormularioAltas() {
@@ -104,7 +100,11 @@ function inicializarFormularioAltas() {
     }
 }
 
-// Exportar formulario y función
+// Asegúrate de que `window.forms` esté definido
 window.forms = window.forms || {};
-window.forms.formularioAltas = forms.formularioAltas;
-window.inicializarFormularioAltas = inicializarFormularioAltas;
+
+// Registro del formulario de Altas
+window.forms['formularioAltas'] = {
+    html: formularioAltasHTML, // La constante con el HTML del formulario
+    init: inicializarFormularioAltas // La función de inicialización, si es necesaria
+};
