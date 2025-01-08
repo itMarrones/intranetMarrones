@@ -10855,37 +10855,41 @@ const datos = [
     }
 ];
 
-// Función para guardar la razón social seleccionada en el arreglo
-function guardarRazonSocialSeleccionada(razonSocial) {
-    if (!razonesSocialesSeleccionadas.includes(razonSocial)) {
-        razonesSocialesSeleccionadas.push(razonSocial);
-        console.log('Razón Social seleccionada guardada:', razonSocial);
-    } else {
-        console.log('La razón social ya ha sido seleccionada anteriormente.');
-    }
+// Función para inicializar el formulario Industrial
+function inicializarFormularioIndustrial() {
+    const formElement = document.getElementById('filter-form');
+ 
+    // Manejo del envío del formulario
+    formElement.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(formElement);
+        const formObject = Object.fromEntries(formData);
+        console.log('Formulario Industrial enviado:', formObject);
+ 
+        // Llamada a Power Automate para llenar el Excel
+        await enviarDatosAExcel(formObject);
+    });
+ 
+    // Cargar los datos dinámicamente en los selects
+    populateSelects();
 }
-
-// Función para obtener las razones sociales seleccionadas (simulando una consulta al servidor)
-function obtenerRazonesSocialesSeleccionadas() {
-    return razonesSocialesSeleccionadas;
-}
-
-// Llamada para llenar los selects
-async function populateSelects() {
+ 
+// Función para cargar los datos dinámicamente en los selects
+function populateSelects() {
     const municipioSelect = document.getElementById('municipio');
     const razonSocialSelect = document.getElementById('razonSocial');
     const codigoClienteSelect = document.getElementById('codigoCliente');
     const viaPublicaSelect = document.getElementById('viaPublica');
-
+ 
     // Limpiar los selects antes de llenarlos
     municipioSelect.innerHTML = '<option value="">Selecciona un Municipio</option>';
     razonSocialSelect.innerHTML = '<option value="">Selecciona una Razón Social</option>';
     codigoClienteSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
     viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
-
+ 
     // Filtrar municipios para eliminar duplicados
     const municipiosUnicos = [...new Set(datos.map(item => item.Municipio))];
-
+ 
     // Rellenar el select de municipios con los valores únicos
     municipiosUnicos.forEach(municipio => {
         const municipioOption = document.createElement('option');
@@ -10893,77 +10897,105 @@ async function populateSelects() {
         municipioOption.textContent = municipio;
         municipioSelect.appendChild(municipioOption);
     });
-
-    // Cargar las razones sociales seleccionadas previamente
-    const razonesSocialesSeleccionadas = obtenerRazonesSocialesSeleccionadas();
-
+ 
     // Rellenar los selects de Razón Social dependiendo del municipio seleccionado
     municipioSelect.addEventListener('change', (e) => {
         const selectedMunicipio = e.target.value;
         const filteredData = datos.filter(item => item.Municipio === selectedMunicipio);
-
+ 
         // Limpiar los selects
         razonSocialSelect.innerHTML = '<option value="">Selecciona una Razón Social</option>';
         codigoClienteSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
         viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
-
-        // Filtrar razones sociales para eliminar las ya seleccionadas
-        const filteredOptions = filteredData.filter(item => !razonesSocialesSeleccionadas.includes(item.RazonSocial));
-
-        filteredOptions.forEach(item => {
+ 
+        filteredData.forEach(item => {
             const razonSocialOption = document.createElement('option');
             razonSocialOption.value = item.RazonSocial;
             razonSocialOption.textContent = item.RazonSocial;
             razonSocialSelect.appendChild(razonSocialOption);
         });
-
+ 
         // Habilitar el select de Razón Social
         razonSocialSelect.disabled = false;
     });
-
+ 
     // Rellenar los selects de Código Cliente y Vía Pública automáticamente dependiendo de la razón social seleccionada
     razonSocialSelect.addEventListener('change', (e) => {
         const selectedRazonSocial = e.target.value;
         const filteredData = datos.filter(item => item.RazonSocial === selectedRazonSocial);
-
+ 
         // Limpiar los selects de Código Cliente y Vía Pública
         codigoClienteSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
         viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
-
+ 
         filteredData.forEach(item => {
             // Establecer los valores en los selects de Código Cliente y Vía Pública
             const codigoClienteOption = document.createElement('option');
             codigoClienteOption.value = item.CodigoCliente;
             codigoClienteOption.textContent = item.CodigoCliente;
             codigoClienteSelect.appendChild(codigoClienteOption);
-
+ 
             const viaPublicaOption = document.createElement('option');
             viaPublicaOption.value = item.ViaPublica;
             viaPublicaOption.textContent = item.ViaPublica;
             viaPublicaSelect.appendChild(viaPublicaOption);
         });
-
+ 
         // Habilitar los selects de Código Cliente y Vía Pública
         codigoClienteSelect.disabled = false;
         viaPublicaSelect.disabled = false;
     });
 }
-
-// Función para manejar el envío del formulario
-document.getElementById('filter-form').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    // Obtener la razón social seleccionada
-    const razonSocialSeleccionada = document.getElementById('razonSocial').value;
-
-    // Guardar la razón social seleccionada
-    if (razonSocialSeleccionada) {
-        guardarRazonSocialSeleccionada(razonSocialSeleccionada);
-        alert('La razón social seleccionada ha sido guardada');
-    } else {
-        alert('Por favor, selecciona una razón social');
+ 
+// Función para enviar los datos a Power Automate (PHP)
+async function enviarDatosAExcel(formData) {
+    // URL de tu endpoint de Power Automate (asegúrate de reemplazarla con tu propia URL)
+    const powerAutomateUrl = "https://prod-22.westeurope.logic.azure.com:443/workflows/f48904dca69449f4a895664e68348f11/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jGHzqXlfT3v4T8Bb9CjhNkH7QBtDIxz0DRIfFNUhXCY";
+ 
+    // Preparar los datos para enviar en formato JSON (de acuerdo con el esquema que has proporcionado)
+    const payload = {
+        "Municipio": formData.municipio,
+        "RazonSocial": formData.razonSocial,
+        "CodigoCliente": parseInt(formData.codigoCliente), // Asegúrate de que sea un número
+        "ViaPublica": formData.viaPublica,
+        "ExteriorAccessible": formData.exteriorAccessible
+    };
+ 
+    try {
+        // Enviar los datos a Power Automate a través de un POST
+        const response = await fetch(powerAutomateUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json', // Asegúrate de enviar los datos como JSON
+            },
+            body: JSON.stringify(payload) // Convierte los datos a JSON
+        });
+ 
+        if (response.ok) {
+            const responseData = await response.json();
+            console.log('Datos enviados correctamente a Power Automate:', responseData);
+            // Aquí podrías mostrar un mensaje al usuario indicando que el Excel fue generado con éxito
+            alert("Los datos se enviaron correctamente y el Excel ha sido generado.");
+        } else {
+            console.error('Error al enviar datos a Power Automate:', response.statusText);
+            alert("Hubo un error al enviar los datos. Intenta nuevamente.");
+        }
+    } catch (error) {
+        console.error('Error de conexión con Power Automate:', error);
+        alert("Hubo un problema al conectarse con Power Automate.");
     }
+}
+ 
+// Botón para cargar el formulario Industrial
+document.getElementById('btnFormIndustrial').addEventListener('click', function () {
+    loadForm('formularioIndustrial');
 });
-
-// Llamar a la función para cargar los selects
-populateSelects();
+ 
+// Asegúrate de que `window.forms` esté definido
+window.forms = window.forms || {};
+ 
+// Registro del formulario industrial
+window.forms['formularioIndustrial'] = {
+    html: formularioIndustrialHTML, // La constante con el HTML del formulario
+    init: inicializarFormularioIndustrial // La función de inicialización, si es necesaria
+};
