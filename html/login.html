@@ -1,37 +1,40 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/login.css">
-    <script src="js/login.js"></script>
+    <!-- Ruta correcta para el CSS -->
+    <link rel="stylesheet" href="../css/login.css">
+    <!-- Cargar el script de MSAL.js (Este debe ser el primer script que cargue) -->
+    <script src="https://cdn.jsdelivr.net/npm/@azure/msal-browser@2.28.0/dist/msal-browser.min.js"></script>
+    <!-- Cargar el script de tu login.js (Este se debe cargar después de msal.js) -->
+    <script src="../js/login.js" defer></script>
     <title>Login Intranet Marrones</title>
 </head>
+
 <body>
     <div class="contenedor">
         <div class="contenedor-bienvenida">
             <img src="https://www.marrones.com/wp-content/uploads/2024/11/1.LOGO-MARRONES@2x.png" alt="Logo Marrones" />
             <h2>Bienvenido a la Intranet de Grupo Marrones</h2>
             <p>Accede a tu cuenta para encontrar las herramientas que necesitas y gestionar tu información personal de
-                manera
-                fácil y rápida.</p>
+                manera fácil y rápida.</p>
         </div>
         <div class="contenedor-login">
             <h1>Iniciar sesión</h1>
-            <div class="campo"><i class="fas fa-user"></i><input type="text" id="usuario" placeholder="Usuario"
-                    required="" />
-            </div>
-            <div class="campo"><i class="fas fa-lock"></i><input type="password" id="contrasena" placeholder="Contraseña"
-                    required="" /></div>
+            <!-- Eliminamos los campos de usuario y contraseña -->
             <div class="opciones">
-                <label><input type="checkbox" id="recordarme" /> Recuérdame </label><a href="#">¿Olvidaste tu
-                    contraseña?</a>
+                <label><input type="checkbox" id="recordarme" /> Recuérdame </label>
+                <a href="#">¿Olvidaste tu contraseña?</a>
             </div>
+            <!-- Botón de login que abre el popup -->
             <button id="botonLogin">Acceder</button>
         </div>
     </div>
-    
-    <!-- Importación de Font Awesome para íconos -->
+
+    <!-- Importación de Font Awesome para íconos (por si los necesitas) -->
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 </body>
+
 </html>

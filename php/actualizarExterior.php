@@ -13,14 +13,11 @@ if (!$datos) {
 }
 
 // Obtener los valores del JSON
-$municipio = $datos['municipio'];
-$razonSocial = $datos['razonSocial'];
-$codigoCliente = $datos['codigoCliente'];
-$viaPublica = $datos['viaPublica'];
-$exteriorAccessible = $datos['exteriorAccesible'];  // Ahora esperamos 'Si' o 'No'
+$clienteId = $datos['clienteId'];
+$exteriorAccessible = $datos['exteriorAccesible'];
 
-// Verificar si los valores obligatorios están presentes
-if (empty($municipio) || empty($razonSocial) || empty($codigoCliente)) {
+// Verificar si los valores están presentes
+if (empty($clienteId) || empty($exteriorAccessible)) {
     echo json_encode(['status' => 'error', 'message' => 'Faltan datos obligatorios.']);
     exit;
 }
@@ -28,21 +25,19 @@ if (empty($municipio) || empty($razonSocial) || empty($codigoCliente)) {
 // Conectar a la base de datos
 $conexion = new mysqli("localhost", "root", "", "intranetmarrones");
 
+// Verificar la conexión
 if ($conexion->connect_error) {
     echo json_encode(['status' => 'error', 'message' => 'Conexión fallida: ' . $conexion->connect_error]);
     exit;
 }
 
-// Normalizar el valor de exteriorAccessible a 'SI' o 'NO'
-if ($exteriorAccessible !== 'Si' && $exteriorAccessible !== 'No') {
-    $exteriorAccessible = null;  // Si el valor no es 'Si' ni 'No', asignar NULL
-} else {
-    $exteriorAccessible = ($exteriorAccessible === 'Si') ? 'SI' : 'NO';
+// Convertir 'null' string en valor NULL para MySQL
+if ($exteriorAccessible === 'NULL') {
+    $exteriorAccessible = null;
 }
 
-// Preparar la consulta SQL para actualizar el valor en la base de datos
-$sql = "UPDATE clientes SET exteriorAccessible = ? 
-        WHERE municipio = ? AND razonSocial = ? AND codigoCliente = ?";
+// Preparar la consulta SQL para actualizar el valor en la tabla clientesindustrial
+$sql = "UPDATE clientesindustrial SET EXTERIORACCESIBLE = ? WHERE CODIGOCLIENTE = ?";
 
 $stmt = $conexion->prepare($sql);
 
@@ -53,13 +48,13 @@ if (!$stmt) {
 }
 
 // Vincular los parámetros a la consulta preparada
-$stmt->bind_param("ssss", $exteriorAccessible, $municipio, $razonSocial, $codigoCliente);
+$stmt->bind_param("si", $exteriorAccessible, $clienteId);
 
 // Ejecutar la consulta
 if ($stmt->execute()) {
     echo json_encode(['status' => 'success', 'message' => 'Datos actualizados correctamente']);
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'Error al actualizar los datos']);
+    echo json_encode(['status' => 'error', 'message' => 'Error al actualizar los datos: ' . $stmt->error]);
 }
 
 // Cerrar la declaración y la conexión

@@ -34,8 +34,8 @@ const formularioIndustrialHTML = `
         <label for="exteriorAccessible">Exterior Accesible:</label>
         <select id="exteriorAccessible" name="exteriorAccessible">
             <option value="">Selecciona una opción</option>
-            <option value="Si">Sí</option>
-            <option value="No">No</option>
+            <option value="SI">Sí</option>
+            <option value="NO">No</option>
         </select>
         <br>
 
@@ -45,23 +45,27 @@ const formularioIndustrialHTML = `
 // Función para inicializar el formulario Industrial
 function inicializarFormularioIndustrial() {
     const formElement = document.getElementById('filter-form');
- 
+    // Asignar fecha actual a 'fecha'
+    document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
+
     // Manejo del envío del formulario
     formElement.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(formElement);
         const formObject = Object.fromEntries(formData);
         console.log('Formulario Industrial enviado:', formObject);
- 
+
         // Llamada a la función para actualizar el valor de exteriorAccesible en la base de datos
         await actualizarExteriorAccesible(formObject);
+
+        // Limpiar el formulario después de enviarlo
+        limpiarFormulario(formElement);
     });
- 
-    // Cargar los datos dinámicamente en los selects
+
+    // Llamada para cargar los datos dinámicamente en los selects
     populateSelects();
 }
 
-// Función para cargar los datos dinámicamente en los selects
 async function populateSelects() {
     const municipioSelect = document.getElementById('municipio');
     const razonSocialSelect = document.getElementById('razonSocial');
@@ -77,19 +81,31 @@ async function populateSelects() {
     try {
         // Fetch de la base de datos para obtener los datos de los clientes
         const response = await fetch('/php/obtenerClientes.php');
-        const clientes = await response.json();
+        const data = await response.json();
 
-        // Verificar que los datos se están obteniendo correctamente
+        // Verificar qué es lo que se recibe
+        console.log("Respuesta de la base de datos:", data);
+
+        // Acceder a los clientes dentro de la propiedad 'data'
+        const clientes = data.data;
+
+        // Verificar que la respuesta es un array
+        if (!Array.isArray(clientes)) {
+            console.error("La respuesta no es un array", clientes);
+            return;
+        }
+
+        // Verificar que los clientes tienen datos
         if (clientes.length === 0) {
             console.error('No se encontraron clientes con exteriorAccesible NULL');
             return;
         }
 
-        // Filtrar clientes para incluir solo aquellos con exteriorAccesible como null
-        const clientesFiltrados = clientes.filter(item => item.exteriorAccesible === null);
+        // Filtrar clientes para incluir solo aquellos con exteriorAccesible como null o cadena vacía
+        const clientesFiltrados = clientes.filter(item => item.EXTERIORACCESIBLE === null || item.EXTERIORACCESIBLE === '');
 
         // Filtrar municipios para eliminar duplicados
-        const municipiosUnicos = [...new Set(clientesFiltrados.map(item => item.Municipio))];
+        const municipiosUnicos = [...new Set(clientesFiltrados.map(item => item.MUNICIPIO))];
 
         // Rellenar el select de municipios con los valores únicos
         municipiosUnicos.forEach(municipio => {
@@ -102,46 +118,46 @@ async function populateSelects() {
         // Rellenar los selects de Razón Social dependiendo del municipio seleccionado
         municipioSelect.addEventListener('change', (e) => {
             const selectedMunicipio = e.target.value;
-            const filteredData = clientesFiltrados.filter(item => item.Municipio === selectedMunicipio);
- 
+            const filteredData = clientesFiltrados.filter(item => item.MUNICIPIO === selectedMunicipio);
+
             // Limpiar los selects
             razonSocialSelect.innerHTML = '<option value="">Selecciona una Razón Social</option>';
             codigoClienteSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
             viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
- 
+
             filteredData.forEach(item => {
                 const razonSocialOption = document.createElement('option');
-                razonSocialOption.value = item.RazonSocial;
-                razonSocialOption.textContent = item.RazonSocial;
+                razonSocialOption.value = item.RAZONSOCIAL;
+                razonSocialOption.textContent = item.RAZONSOCIAL;
                 razonSocialSelect.appendChild(razonSocialOption);
             });
- 
+
             // Habilitar el select de Razón Social
             razonSocialSelect.disabled = false;
         });
- 
+
         // Rellenar los selects de Código Cliente y Vía Pública automáticamente dependiendo de la razón social seleccionada
         razonSocialSelect.addEventListener('change', (e) => {
             const selectedRazonSocial = e.target.value;
-            const filteredData = clientesFiltrados.filter(item => item.RazonSocial === selectedRazonSocial);
- 
+            const filteredData = clientesFiltrados.filter(item => item.RAZONSOCIAL === selectedRazonSocial);
+
             // Limpiar los selects de Código Cliente y Vía Pública
             codigoClienteSelect.innerHTML = '<option value="">Selecciona un Código Cliente</option>';
             viaPublicaSelect.innerHTML = '<option value="">Selecciona una Vía Pública</option>';
- 
+
             filteredData.forEach(item => {
                 // Establecer los valores en los selects de Código Cliente y Vía Pública
                 const codigoClienteOption = document.createElement('option');
-                codigoClienteOption.value = item.CodigoCliente;
-                codigoClienteOption.textContent = item.CodigoCliente;
+                codigoClienteOption.value = item.CODIGOCLIENTE;
+                codigoClienteOption.textContent = item.CODIGOCLIENTE;
                 codigoClienteSelect.appendChild(codigoClienteOption);
- 
+
                 const viaPublicaOption = document.createElement('option');
-                viaPublicaOption.value = item.ViaPublica;
-                viaPublicaOption.textContent = item.ViaPublica;
+                viaPublicaOption.value = item.VIAPUBLICA;
+                viaPublicaOption.textContent = item.VIAPUBLICA;
                 viaPublicaSelect.appendChild(viaPublicaOption);
             });
- 
+
             // Habilitar los selects de Código Cliente y Vía Pública
             codigoClienteSelect.disabled = false;
             viaPublicaSelect.disabled = false;
@@ -157,7 +173,7 @@ async function actualizarExteriorAccesible(formData) {
     const exteriorAccesible = formData.exteriorAccessible;
 
     try {
-        // Primero, enviamos los datos a Power Automate (si es necesario)
+        // Enviar los datos a Power Automate
         const powerAutomateUrl = "https://prod-22.westeurope.logic.azure.com:443/workflows/f48904dca69449f4a895664e68348f11/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=jGHzqXlfT3v4T8Bb9CjhNkH7QBtDIxz0DRIfFNUhXCY";
         const payload = {
             "Municipio": formData.municipio,
@@ -167,6 +183,7 @@ async function actualizarExteriorAccesible(formData) {
             "ExteriorAccessible": exteriorAccesible
         };
 
+        // Enviar datos a Power Automate
         const responsePowerAutomate = await fetch(powerAutomateUrl, {
             method: 'POST',
             headers: {
@@ -181,7 +198,7 @@ async function actualizarExteriorAccesible(formData) {
             return;
         }
 
-        // Después, enviamos los datos a la base de datos
+        // Luego actualizar los datos en la base de datos XAMPP
         const response = await fetch('/php/actualizarExterior.php', {
             method: 'POST',
             headers: {
@@ -195,34 +212,39 @@ async function actualizarExteriorAccesible(formData) {
 
         if (response.ok) {
             const result = await response.json();
-            console.log('Actualización exitosa:', result);
-            alert('La actualización fue exitosa.');
+            console.log('Datos actualizados correctamente:', result);
+            alert('Datos actualizados correctamente');
         } else {
-            console.error('Error al actualizar el valor de exteriorAccesible:', response.statusText);
-            alert('Hubo un error al actualizar los datos.');
+            console.error('Error al actualizar los datos:', response.statusText);
+            alert('Error al actualizar los datos en la base de datos.');
         }
     } catch (error) {
-        console.error('Error de conexión:', error);
-        alert('Hubo un problema de conexión.');
+        console.error('Error al actualizar los datos:', error);
+        alert('Ocurrió un error al intentar actualizar los datos.');
     }
 }
 
-// Función para cargar el formulario Industrial en el contenedor
+// Cargar el formulario de Industrial
 function loadForm(formName) {
     const formContainer = document.getElementById('form-container');
     if (formContainer) {
         formContainer.innerHTML = window.forms[formName].html;
         window.forms[formName].init();
     } else {
-        console.error('No se encontró el contenedor de formulario con id "form-container".');
+        console.error('Contenedor de formulario no encontrado.');
     }
 }
+function limpiarFormulario(formElement) {
+    formElement.reset();
+    document.getElementById('razonSocial').disabled = true;
+    document.getElementById('codigoCliente').disabled = true;
+    document.getElementById('viaPublica').disabled = true;
+}
 
-// Asegúrate de que `window.forms` esté definido
+
+// Registrar el formulario
 window.forms = window.forms || {};
-
-// Registro del formulario industrial
 window.forms['formularioIndustrial'] = {
-    html: formularioIndustrialHTML, // La constante con el HTML del formulario
-    init: inicializarFormularioIndustrial // La función de inicialización
+    html: formularioIndustrialHTML,
+    init: inicializarFormularioIndustrial
 };

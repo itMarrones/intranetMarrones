@@ -116,7 +116,8 @@ body {
 
 .contenedor-bienvenida {
     flex: 1;
-    background-color: white;
+    background-color: #2d5559;
+    /* Cambié el color de fondo a #2d5559 */
     color: #636363;
     display: flex;
     flex-direction: column;
@@ -130,7 +131,8 @@ body {
 }
 
 .contenedor-bienvenida h2 {
-    color: black;
+    color: white;
+    /* Ajusté el color del texto para mayor contraste */
     font-weight: bold;
     font-size: 24px;
     margin-bottom: 10px;
@@ -140,7 +142,8 @@ body {
 }
 
 .contenedor-bienvenida p {
-    color: black;
+    color: white;
+    /* Ajusté el color del texto para mayor contraste */
     font-size: 16px;
     text-align: center;
     margin-bottom: 20px;

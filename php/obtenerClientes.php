@@ -1,44 +1,33 @@
 <?php
-header('Content-Type: application/json');
-
 // Conexión a la base de datos
-$conexion = new mysqli('localhost', 'root', '', 'intranetmarrones');
+$host = 'localhost';
+$user = 'root';
+$password = '';
+$database = 'intranetmarrones';
 
-// Verificar la conexión
-if ($conexion->connect_error) {
-    die("Conexión fallida: " . $conexion->connect_error);
+$connection = new mysqli($host, $user, $password, $database);
+
+// Verifica la conexión
+if ($connection->connect_error) {
+    die(json_encode(['status' => 'error', 'message' => 'Error al conectar con la base de datos: ' . $connection->connect_error]));
 }
 
-// Consulta para obtener los clientes donde exteriorAccesible es NULL
-$sql = "SELECT Municipio, RazonSocial, CodigoCliente, ViaPublica, exteriorAccesible
-        FROM clientes 
-        WHERE exteriorAccesible IS NULL";
+// Consulta para obtener los clientes con EXTERIORACCESIBLE como NULL o vacío
+$sql = "SELECT MUNICIPIO, RAZONSOCIAL, CODIGOCLIENTE, VIAPUBLICA, EXTERIORACCESIBLE
+        FROM clientesindustrial 
+        WHERE EXTERIORACCESIBLE IS NULL OR EXTERIORACCESIBLE = ''";
 
-// Ejecutar la consulta
-$resultado = $conexion->query($sql);
+$result = $connection->query($sql);
 
-// Verificar si hay resultados
-if ($resultado === false) {
-    die("Error en la consulta: " . $conexion->error);
-}
-
-// Comprobar si hay resultados
-if ($resultado->num_rows > 0) {
-    // Array para almacenar los resultados
-    $clientes = array();
-
-    // Recorrer los resultados y agregarlos al array
-    while ($row = $resultado->fetch_assoc()) {
+if ($result) {
+    $clientes = [];
+    while ($row = $result->fetch_assoc()) {
         $clientes[] = $row;
     }
-
-    // Devolver los datos en formato JSON
-    echo json_encode($clientes);
+    echo json_encode(['status' => 'success', 'data' => $clientes]);
 } else {
-    // Si no hay resultados, devolver un array vacío
-    echo json_encode([]);
+    echo json_encode(['status' => 'error', 'message' => 'Error en la consulta: ' . $connection->error]);
 }
 
-// Cerrar la conexión
-$conexion->close();
+$connection->close();
 ?>

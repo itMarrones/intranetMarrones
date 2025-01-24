@@ -49,6 +49,7 @@ function setupFormButtons() {
         'btnFormIndustrial': 'formularioIndustrial', // Este formulario debe existir en el objeto 'forms'
         'btnFormTicketing': 'formularioTicketing',  // Este formulario debe existir en el objeto 'forms'
         'btnFormDirectorio': 'directorioEmpleados', // El botón para el Directorio
+        'btnFormDirectorio': 'directorioEmpleados', // El botón para el Directorio
     };
 
     const sidebar = document.getElementById('sidebar');

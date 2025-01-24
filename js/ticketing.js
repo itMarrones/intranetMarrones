@@ -1,4 +1,4 @@
-// HTML para el formulario de Ticketing (sin cambios)
+// HTML para el formulario de Ticketing
 const formularioTicketingHTML = `
     <h1>Formulario de Ticketing</h1>
     <form id="incidenciaForm">
@@ -64,14 +64,18 @@ const formularioTicketingHTML = `
     </form>
 `;
 
-// Función para inicializar el formulario de Ticketing (similar al de Altas)
+// Función para inicializar el formulario de Ticketing
 function inicializarFormularioTicketing() {
     const formElement = document.getElementById('incidenciaForm');
     if (formElement) {
         console.log('Inicializando formulario de Ticketing...');
 
-        // Asignar fecha actual a 'fechaSolicitud'
-        document.getElementById('fechaSolicitud').value = new Date().toISOString().split('T')[0];
+       // Función que asigna la fecha actual al campo de la fecha
+function asignarFechaActual(idCampoFecha) {
+    const fechaActual = new Date().toISOString().split('T')[0]; // Obtiene la fecha actual en formato 'YYYY-MM-DD'
+    document.getElementById(idCampoFecha).value = fechaActual; // Asigna la fecha al campo correspondiente
+}
+
 
         // Comportamiento dinámico para el select de tipo de solicitud
         const tipoSolicitudSelect = document.getElementById('tipoSolicitud');
@@ -83,53 +87,12 @@ function inicializarFormularioTicketing() {
             subTipoIncidencia.disabled = tipoSolicitud !== 'Incidencia Técnica';
         });
 
-        // Capturar el evento de envío del formulario
-        formElement.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            console.log('Formulario de Ticketing enviado');
-
-            // Recoger los datos del formulario
-            const formData = new FormData(formElement);
-            const formObject = Object.fromEntries(formData);
-
-            // Preparar el asunto y cuerpo del mensaje
-            const subject = `${formObject.subTipoIncidencia || formObject.tipoSolicitud} - ${formObject.descCorta} - ${formObject.nombreUsuario}`;
-            const body = `
-                Fecha de Solicitud: ${formObject.fechaSolicitud}
-                \nFecha de la Incidencia: ${formObject.fechaIncidencia}
-                \nSede: ${formObject.sede}
-                \nNombre de Usuario: ${formObject.nombreUsuario}
-                \nCorreo Electrónico: ${formObject.correoElectronico}
-                \nTeléfono de Contacto: ${formObject.telefonoContacto}
-                \nTipo de Solicitud: ${formObject.tipoSolicitud}
-                \nTipo de Incidencia Específica: ${formObject.subTipoIncidencia || 'N/A'}
-                \n¿Afecta a todo el mundo?: ${formObject.afectaTodo}
-                \nDescripción Corta: ${formObject.descCorta}
-                \nDescripción de la Incidencia: ${formObject.descripcion}
-            `;
-
-            // Preparar los parámetros para el envío con EmailJS (este es solo un ejemplo)
-            const emailParams = {
-                to_email: 'ticketing20+wjzhinusepvf2qq4v0pu@boards.trello.com',
-                cc_email: 'informatica@marrones.cat',
-                subject: subject,
-                message: body,
-            };
-
-            // Enviar el correo con EmailJS (esto es un ejemplo de integración)
-            emailjs.send('tu_servicio_id', 'tu_plantilla_id', emailParams)
-                .then(response => {
-                    alert("Ticket enviado con éxito.");
-                })
-                .catch(error => {
-                    alert("Error al completar el formulario.");
-                    console.error('Error:', error);
-                });
-        });
+        // Limpiar el formulario
+        formElement.reset();
     }
 }
 
-// Función para cargar el formulario de Ticketing (similar a la lógica de Altas)
+// Función para cargar el formulario de Ticketing
 function cargarFormularioTicketing() {
     const contentContainer = document.getElementById('form-container');
     contentContainer.innerHTML = formularioTicketingHTML;
@@ -148,4 +111,72 @@ window.forms['formularioTicketing'] = {
 // Cargar el formulario de Ticketing al hacer clic en el botón (ajusta el botón según el HTML)
 document.getElementById('btnFormTicketing').addEventListener('click', function () {
     cargarFormularioTicketing();
+});
+
+// Código JavaScript para manejar el envío de datos al flujo de Power Automate
+document.addEventListener("DOMContentLoaded", function () {
+
+    // Captura el evento de enviar el formulario
+    document.getElementById("incidenciaForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevenir el envío por defecto del formulario
+
+        const formData = new FormData(this);
+        const archivos = document.getElementById("ficheros").files;
+
+        // Preparamos los datos para enviar
+        const data = {
+            fechaSolicitud: formData.get("fechaSolicitud"),
+            fechaIncidencia: formData.get("fechaIncidencia"),
+            sede: formData.get("sede"),
+            nombreUsuario: formData.get("nombreUsuario"),
+            correoElectronico: formData.get("correoElectronico"),
+            telefonoContacto: formData.get("telefonoContacto"),
+            tipoSolicitud: formData.get("tipoSolicitud"),
+            subTipoIncidencia: formData.get("subTipoIncidencia") || "N/A",
+            afectaTodo: formData.get("afectaTodo"),
+            descCorta: formData.get("descCorta"),
+            descripcion: formData.get("descripcion"),
+            archivos: [] // Inicializamos como array vacío
+        };
+
+        // Si hay archivos seleccionados, los agregamos al array
+        if (archivos.length > 0) {
+            for (const archivo of archivos) {
+                data.archivos.push({
+                    nombre: archivo.name,
+                    tipo: archivo.type,
+                    tamanio: archivo.size
+                });
+            }
+        }
+
+        // URL del flujo de Power Automate (webhook)
+        const flowUrl = 'https://prod-119.westeurope.logic.azure.com:443/workflows/70e414bb1f8943f1bdbf76b3abad661b/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=OlGqK7aX5i5B29mXbvePKfkDSF_IudZnHkWaW_Yx58o';  // URL real del flujo
+
+        // Enviar los datos al flujo de Power Automate
+        fetch(flowUrl, {
+            method: "POST", // Método de solicitud
+            headers: {
+                "Content-Type": "application/json" // Indicamos que el contenido es JSON
+            },
+            body: JSON.stringify(data) // Enviamos los datos en formato JSON
+        })
+            .then(response => {
+                // Comprobamos si la respuesta fue exitosa
+                if (!response.ok) {
+                    throw new Error("Error en la solicitud HTTP: " + response.statusText);
+                }
+                return response.json(); // Convertimos la respuesta en JSON
+            })
+            .then(data => {
+                // Si todo fue exitoso, notificamos al usuario
+                alert("Incidencia enviada con éxito.");
+                document.getElementById("incidenciaForm").reset(); // Limpiamos el formulario
+            })
+            .catch(error => {
+                // Si hubo un error en el proceso
+                alert("Error al enviar la incidencia. Por favor, intenta nuevamente.");
+                console.error("Error:", error);
+            });
+    });
 });
